@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ItemsModule } from './items/items.module';
 import { UsersModule } from './users/users.module';
 import {TypeOrmModule} from '@nestjs/typeorm'; 
+import { AuthModule } from './auth/auth.module';
 
 
 //--Ver si realizamos un .ENV o conectamos directo a la DB--//
@@ -13,7 +14,7 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 
 
 @Module({
-  imports: [
+  imports: [AuthModule,
     TypeOrmModule.forRoot({
       type:'mysql',
       host: 'localhost',
@@ -21,8 +22,8 @@ import {TypeOrmModule} from '@nestjs/typeorm';
       username:'admin',
       password: '1234',
       database:'sistema_gestion',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize:true
+      entities: [__dirname + '/**/*.entity{.ts,.js}'], //----autoLoadEntities:true---//
+      synchronize:true //--False--//
     }),
     ItemsModule, 
     UsersModule],
