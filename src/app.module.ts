@@ -20,7 +20,7 @@ import { AuthModule } from './auth/auth.module';
       host: 'localhost',
       port: 3306,
       username:'admin',
-      password: '1234',
+      password: 'sistema2024@',
       database:'sistema_gestion',
       entities: [__dirname + '/**/*.entity{.ts,.js}'], //----autoLoadEntities:true---//
       synchronize:true //--False--//

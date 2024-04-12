@@ -1,5 +1,7 @@
-import { EstadoUsuarioEnum } from "src/estadoUsuario/estadoUsuario-enum";
-import { Entity, Column , PrimaryGeneratedColumn } from "typeorm";
+import { rolesEnum } from "src/estadoUsuario/roles.enum";
+import { Entity, Column , PrimaryGeneratedColumn} from "typeorm";
+
+
 
 @Entity({name: 'usuarios'})
 export class User{
@@ -14,18 +16,14 @@ export class User{
     clave: string
 
     @Column()
-    rol: string
-
-    @Column()
     nombre: string
 
     @Column()
     apellido: string
 
-    @Column ({type: 'enum', enum: EstadoUsuarioEnum})
-    estado:EstadoUsuarioEnum;
+    @Column({type: 'enum' , enum: rolesEnum })
+    rol:string
 
-    @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP'})
-     fechaCreacion: Date
+
 
 }
