@@ -1,33 +1,17 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ItemsModule } from './items/items.module';
-import { UsersModule } from './users/users.module';
-import {TypeOrmModule} from '@nestjs/typeorm'; 
-import { AuthModule } from './auth/auth.module';
+import { RouterModule } from '@nestjs/core';
 
-
-//--Ver si realizamos un .ENV o conectamos directo a la DB--//
-//--Robustecer Password--//
-//--Generar Usuario mysql--//
-//--El Host solamente es de forma local por el momento--//
-
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
-  imports: [AuthModule,
-    TypeOrmModule.forRoot({
-      type:'mysql',
-      host: 'localhost',
-      port: 3306,
-      username:'admin',
-      password: 'sistema2024@',
-      database:'sistema_gestion',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'], //----autoLoadEntities:true---//
-      synchronize:true //--False--//
-    }),
-    ItemsModule, 
-    UsersModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    AuthModule,
+    RouterModule.register([
+      {
+        path: 'auth',
+        module: AuthModule,
+      },
+    ]),
+  ],
 })
 export class AppModule {}
