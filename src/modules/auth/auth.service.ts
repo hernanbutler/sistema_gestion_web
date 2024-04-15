@@ -1,15 +1,15 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import { RsRegisterUserDto } from './dtos';
-import { UserEntity } from './entities';
+import { RsRegisterUserDto } from "./dtos";
+import { UserEntity } from "./entities";
 import {
   ENCRYPT_SERVICE,
   IEncrypt,
   IRegisterFactory,
   REGISTER_FACTORY_SERVICE,
-} from './interfaces';
+} from "./interfaces";
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
     private readonly registerFactoryService: IRegisterFactory,
 
     @Inject(ENCRYPT_SERVICE)
-    private readonly encryptService: IEncrypt,
+    private readonly encryptService: IEncrypt
   ) {}
 
   async register(userEntity: UserEntity): Promise<RsRegisterUserDto> {
@@ -36,22 +36,22 @@ export class AuthService {
         registerUserDB !== null
           ? this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.CREATED,
-              'Usuario creado exitosamente',
+              "Usuario creado exitosamente"
             )
           : this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.INTERNAL_SERVER_ERROR,
-              'Error al registrar el usuario',
+              "Error al registrar el usuario"
             );
     } catch (err) {
       registerUserDto =
-        err.code && err.code === 'ER_DUP_ENTRY'
+        err.code && err.code === "ER_DUP_ENTRY"
           ? this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.CONFLICT,
-              'Inconsistencia detectada al registrar el usuario',
+              "Inconsistencia detectada al registrar el usuario"
             )
           : this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.INTERNAL_SERVER_ERROR,
-              'Error al registrar el usuario',
+              "Error al registrar el usuario"
             );
     }
 
