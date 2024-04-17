@@ -7,7 +7,9 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserEntity } from './entities';
 import { ENCRYPT_SERVICE, REGISTER_FACTORY_SERVICE } from './interfaces';
-import { EncryptService, RegisterFactoryService } from './services';
+import { EncryptService, RegisterFactoryService} from './services';
+import { LOGIN_FACTORY_SERVICE} from './interfaces/login-factory.interface';
+import { LoginFactoryService } from './services/login-factory.service';
 
 @Module({
   imports: [
@@ -42,6 +44,11 @@ import { EncryptService, RegisterFactoryService } from './services';
       useClass: RegisterFactoryService,
       provide: REGISTER_FACTORY_SERVICE,
     },
+      
+    {
+      useClass: LoginFactoryService,
+      provide: LOGIN_FACTORY_SERVICE,
+    }
   ],
 })
 export class AuthModule {
