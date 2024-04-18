@@ -7,9 +7,9 @@ import {
   Post,
   UseInterceptors,
 } from '@nestjs/common';
-import { RqRegisterUserDto, RsLoginDto, RsRegisterUserDto } from './dtos';
+import { RqRegisterUserDto, RsLoginUserDto, RsRegisterUserDto } from './dtos';
 import { REGISTER_FACTORY_SERVICE, IRegisterFactory } from './interfaces';
-import { RqLoginDto } from './dtos/rq-login-user.dto';
+import { RqLoginUserDto } from './dtos/rq-login-user.dto';
 import { ILoginFactory, LOGIN_FACTORY_SERVICE } from './interfaces/login-factory.interface';
 
 @Controller()
@@ -39,8 +39,8 @@ export class AuthController {
 
   @Post('login')
   async login(
-    @Body() loginDto: RqLoginDto,
-  ): Promise<RsLoginDto> {
+    @Body() loginDto: RqLoginUserDto,
+  ): Promise<RsLoginUserDto> {
     const login =
       this.loginFactoryService.DTORequesttoLoginEntity(loginDto);
     return await this.authService.login(login);

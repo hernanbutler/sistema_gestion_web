@@ -7,3 +7,4 @@ export {
   LOGIN_FACTORY_SERVICE,
   ILoginFactory,
 } from "./login-factory.interface";
+export {JWT_TOKEN_SERVICE,IJwtToken} from "./jwt-token.interface"

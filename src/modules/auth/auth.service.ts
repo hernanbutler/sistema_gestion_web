@@ -1,22 +1,23 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import { RsLoginDto, RsRegisterUserDto } from './dtos';
-import { UserEntity } from './entities';
+import { RsLoginUserDto, RsRegisterUserDto } from "./dtos";
+import { UserEntity } from "./entities";
 import {
   ENCRYPT_SERVICE,
   IEncrypt,
+  IJwtToken,
+  ILoginFactory,
   IRegisterFactory,
+  JWT_TOKEN_SERVICE,
+  LOGIN_FACTORY_SERVICE,
   REGISTER_FACTORY_SERVICE,
-} from './interfaces';
-import { ILoginFactory, LOGIN_FACTORY_SERVICE} from './interfaces/login-factory.interface';
-import { JwtService } from '@nestjs/jwt';
+} from "./interfaces";
+
 
 @Injectable()
 export class AuthService {
-  
-  
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
@@ -30,15 +31,17 @@ export class AuthService {
     @Inject(LOGIN_FACTORY_SERVICE)
     private readonly loginFactoryService: ILoginFactory,
 
-    private readonly jwtService: JwtService
-
+    @Inject(JWT_TOKEN_SERVICE)
+    private readonly jwtTokenService : IJwtToken
   ) {}
 
   async register(userEntity: UserEntity): Promise<RsRegisterUserDto> {
     let registerUserDto: RsRegisterUserDto;
 
     try {
-      userEntity.password = await this.encryptService.encrypt(userEntity.password);
+      userEntity.password = await this.encryptService.encrypt(
+        userEntity.password
+      );
 
       const registerUserDB = await this.userRepository.save(userEntity);
 
@@ -46,60 +49,68 @@ export class AuthService {
         registerUserDB !== null
           ? this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.CREATED,
-              'Usuario creado exitosamente',
+              "Usuario creado exitosamente"
             )
           : this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.INTERNAL_SERVER_ERROR,
-              'Error al registrar el usuario',
+              "Error al registrar el usuario"
             );
     } catch (err) {
       registerUserDto =
-        err.code && err.code === 'ER_DUP_ENTRY'
+        err.code && err.code === "ER_DUP_ENTRY"
           ? this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.CONFLICT,
-              'Inconsistencia detectada al registrar el usuario',
+              "Inconsistencia detectada al registrar el usuario"
             )
           : this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.INTERNAL_SERVER_ERROR,
-              'Error al registrar el usuario',
+              "Error al registrar el usuario"
             );
     }
 
     return registerUserDto;
   }
 
-  async login(userEntity: UserEntity): Promise<RsLoginDto> {
-    let loginDto: RsLoginDto;
-
+  async login(userEntity: UserEntity): Promise<RsLoginUserDto> {
+    let loginUserDto: RsLoginUserDto;
     try {
-      userEntity.clave = await this.encryptService.encrypt(userEntity.clave);
+      userEntity.password = await this.encryptService.encrypt(
+        userEntity.password
+      );
 
-      let loginDB = await this.userRepository.findOneBy(userEntity);
+      const loginUserDB = await this.userRepository.findOneBy({
+        email: userEntity.email,
+      });
 
-      loginDto =
-        loginDB !== null
-          ? this.loginFactoryService.LoginEntitytoDTOResponse(
-              HttpStatus.CREATED,
-              'Clave creado exitosamente',
-            )
+      loginUserDto =
+        loginUserDB !== null
+          ? (await this.encryptService.compare(
+              loginUserDB.password,
+              userEntity.password
+            ))
+            ? this.loginFactoryService.LoginEntitytoDTOResponse(
+                HttpStatus.OK,
+                "",
+                this.jwtTokenService.jwtTokenGenerate(userEntity)
+              )
+            : this.loginFactoryService.LoginEntitytoDTOResponse(
+                HttpStatus.FORBIDDEN,
+                "Usuario / Contraseña incorrecto",
+                null
+              )
           : this.loginFactoryService.LoginEntitytoDTOResponse(
-              HttpStatus.INTERNAL_SERVER_ERROR,
-              'Error al ingresar la clave',
+              HttpStatus.NOT_FOUND,
+              "Usuario Invàlido",
+              null
             );
     } catch (err) {
-      loginDto =
-        err.code && err.code === 'ER_DUP_ENTRY'
-          ? this.loginFactoryService.LoginEntitytoDTOResponse(
-              HttpStatus.CONFLICT,
-              'Inconsistencia detectada al ingresar la clave',
-            )
-          : this.loginFactoryService.LoginEntitytoDTOResponse(
-              HttpStatus.INTERNAL_SERVER_ERROR,
-              'Error al registrar la clave',
-            );
+      loginUserDto = this.loginFactoryService.LoginEntitytoDTOResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Error en el servidor",
+        null
+      );
     }
 
-    return loginDto;
-    
-  } 
+    return loginUserDto;
+  }
 }

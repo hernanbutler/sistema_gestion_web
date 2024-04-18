@@ -1,6 +1,6 @@
 import { RsGenericHeaderDto } from "./rs-generic-header.dto";
 
-export interface RsLoginUserDataDto {
+interface RsLoginUserDataDto {
   accessToken: string;
 }
 
