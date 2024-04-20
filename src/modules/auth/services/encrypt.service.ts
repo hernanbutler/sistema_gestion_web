@@ -10,7 +10,7 @@ export class EncryptService implements IEncrypt {
     return await bcrypt.hash(password, salt);
   }
 
-  async compare(password: string, value: string): Promise<boolean> {
-    return await bcrypt.compare(password, value);
+  async compare(password: string, encrypted: string): Promise<boolean> {
+    return await bcrypt.compare(password, encrypted);
   }
 }

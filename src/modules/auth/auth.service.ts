@@ -15,25 +15,64 @@ import {
   REGISTER_FACTORY_SERVICE,
 } from "./interfaces";
 
-
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
 
-    @Inject(REGISTER_FACTORY_SERVICE)
-    private readonly registerFactoryService: IRegisterFactory,
-
     @Inject(ENCRYPT_SERVICE)
     private readonly encryptService: IEncrypt,
+
+    @Inject(JWT_TOKEN_SERVICE)
+    private readonly jwtTokenService: IJwtToken,
 
     @Inject(LOGIN_FACTORY_SERVICE)
     private readonly loginFactoryService: ILoginFactory,
 
-    @Inject(JWT_TOKEN_SERVICE)
-    private readonly jwtTokenService : IJwtToken
+    @Inject(REGISTER_FACTORY_SERVICE)
+    private readonly registerFactoryService: IRegisterFactory
   ) {}
+
+  async login(userEntity: UserEntity): Promise<RsLoginUserDto> {
+    let loginUserDto: RsLoginUserDto;
+
+    try {
+      const loginUserDB = await this.userRepository.findOneBy({
+        email: userEntity.email,
+      });
+
+      loginUserDto =
+        loginUserDB !== null
+          ? (await this.encryptService.compare(
+              userEntity.password,
+              loginUserDB.password
+            ))
+            ? this.loginFactoryService.LoginEntitytoDTOResponse(
+                HttpStatus.OK,
+                "",
+                this.jwtTokenService.jwtTokenGenerate(userEntity)
+              )
+            : this.loginFactoryService.LoginEntitytoDTOResponse(
+                HttpStatus.FORBIDDEN,
+                "Usuario / Contraseña incorrecto",
+                null
+              )
+          : this.loginFactoryService.LoginEntitytoDTOResponse(
+              HttpStatus.NOT_FOUND,
+              "Usuario Invàlido",
+              null
+            );
+    } catch (err) {
+      loginUserDto = this.loginFactoryService.LoginEntitytoDTOResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Error en el servidor",
+        null
+      );
+    }
+
+    return loginUserDto;
+  }
 
   async register(userEntity: UserEntity): Promise<RsRegisterUserDto> {
     let registerUserDto: RsRegisterUserDto;
@@ -69,48 +108,5 @@ export class AuthService {
     }
 
     return registerUserDto;
-  }
-
-  async login(userEntity: UserEntity): Promise<RsLoginUserDto> {
-    let loginUserDto: RsLoginUserDto;
-    try {
-      userEntity.password = await this.encryptService.encrypt(
-        userEntity.password
-      );
-
-      const loginUserDB = await this.userRepository.findOneBy({
-        email: userEntity.email,
-      });
-
-      loginUserDto =
-        loginUserDB !== null
-          ? (await this.encryptService.compare(
-              loginUserDB.password,
-              userEntity.password
-            ))
-            ? this.loginFactoryService.LoginEntitytoDTOResponse(
-                HttpStatus.OK,
-                "",
-                this.jwtTokenService.jwtTokenGenerate(userEntity)
-              )
-            : this.loginFactoryService.LoginEntitytoDTOResponse(
-                HttpStatus.FORBIDDEN,
-                "Usuario / Contraseña incorrecto",
-                null
-              )
-          : this.loginFactoryService.LoginEntitytoDTOResponse(
-              HttpStatus.NOT_FOUND,
-              "Usuario Invàlido",
-              null
-            );
-    } catch (err) {
-      loginUserDto = this.loginFactoryService.LoginEntitytoDTOResponse(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        "Error en el servidor",
-        null
-      );
-    }
-
-    return loginUserDto;
   }
 }

@@ -4,10 +4,10 @@ import { UserEntity } from "../entities";
 export const LOGIN_FACTORY_SERVICE = "LOGIN_FACTORY_SERVICE";
 
 export interface ILoginFactory {
-  DTORequesttoLoginEntity(rqLoginDto: RqLoginUserDto): UserEntity;
+  DTORequesttoLoginEntity(rqLoginUserDto: RqLoginUserDto): UserEntity;
   LoginEntitytoDTOResponse(
     statusCode: number,
     message: string,
-    accessToken: string
+    token: string
   ): RsLoginUserDto;
 }

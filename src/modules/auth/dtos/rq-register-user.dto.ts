@@ -5,6 +5,7 @@ import {
   IsString,
   MaxLength,
 } from "class-validator";
+
 import { Rol } from "../common/enums";
 
 export class RqRegisterUserDto {

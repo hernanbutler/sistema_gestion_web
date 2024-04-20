@@ -1,7 +1,7 @@
-import { RsGenericHeaderDto } from "./rs-generic-header.dto";
+import { RsGenericHeaderDto } from "src/dtos";
 
-interface RsLoginUserDataDto {
-  accessToken: string;
+export interface RsLoginUserDataDto {
+  token: string;
 }
 
 export class RsLoginUserDto {
@@ -9,8 +9,8 @@ export class RsLoginUserDto {
   rsLoginUserDataDto: RsLoginUserDataDto;
 
   constructor(
-    rsLoginUserDataDto: RsLoginUserDataDto,
-    rsGenericHeaderDto: RsGenericHeaderDto
+    rsGenericHeaderDto: RsGenericHeaderDto,
+    rsLoginUserDataDto: RsLoginUserDataDto
   ) {
     this.rsGenericHeaderDto = rsGenericHeaderDto;
     this.rsLoginUserDataDto = rsLoginUserDataDto;
