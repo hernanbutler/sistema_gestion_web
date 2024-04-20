@@ -28,7 +28,9 @@ export class AuthService {
     let registerUserDto: RsRegisterUserDto;
 
     try {
-      userEntity.clave = await this.encryptService.encrypt(userEntity.clave);
+      userEntity.password = await this.encryptService.encrypt(
+        userEntity.password
+      );
 
       const registerUserDB = await this.userRepository.save(userEntity);
 
