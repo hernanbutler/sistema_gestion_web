@@ -1,7 +1,4 @@
-export interface RsGenericHeaderDto {
-  statusCode: number;
-  message?: string;
-}
+import { RsGenericHeaderDto } from "src/dtos";
 
 export class RsRegisterUserDto {
   rsGenericHeaderDto: RsGenericHeaderDto;

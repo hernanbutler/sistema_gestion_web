@@ -4,8 +4,9 @@ import {
   IsNotEmpty,
   IsString,
   MaxLength,
-} from 'class-validator';
-import { Rol } from '../common/enums';
+} from "class-validator";
+
+import { Rol } from "../common/enums";
 
 export class RqRegisterUserDto {
   @IsNotEmpty()
@@ -16,7 +17,7 @@ export class RqRegisterUserDto {
   @IsNotEmpty()
   @IsString()
   @MaxLength(72)
-  readonly clave: string;
+  readonly password: string;
 
   @IsNotEmpty()
   @IsEnum(Rol)
