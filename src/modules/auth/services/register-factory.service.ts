@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
-import { UserEntity } from '../entities';
-import { RqRegisterUserDto, RsRegisterUserDto } from '../dtos';
-import { IRegisterFactory } from '../interfaces';
+import { UserEntity } from "../entities";
+import { RqRegisterUserDto, RsRegisterUserDto } from "../dtos";
+import { IRegisterFactory } from "../interfaces";
 
 @Injectable()
 export class RegisterFactoryService implements IRegisterFactory {
@@ -10,7 +10,7 @@ export class RegisterFactoryService implements IRegisterFactory {
     const userEntity = new UserEntity();
 
     userEntity.email = rqRegisterUserDto.email;
-    userEntity.clave = rqRegisterUserDto.clave;
+    userEntity.password = rqRegisterUserDto.password;
     userEntity.rol = rqRegisterUserDto.rol;
 
     return userEntity;
@@ -18,7 +18,7 @@ export class RegisterFactoryService implements IRegisterFactory {
 
   RegisterEntitytoDTOResponse(
     statusCode: number,
-    message: string,
+    message: string
   ): RsRegisterUserDto {
     return new RsRegisterUserDto({ statusCode, message });
   }

@@ -10,7 +10,7 @@ export class UserEntity {
   email: string;
 
   @Column({ length: 72 })
-  clave: string;
+  password: string;
 
   @Column({ nullable: true })
   apellidos?: string;
