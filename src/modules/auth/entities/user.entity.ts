@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Estado, Rol } from "../common/enums";
 
 @Entity({ name: "usuarios" })
@@ -26,4 +26,9 @@ export class UserEntity {
 
   @Column()
   rol: Rol;
+
+  @DeleteDateColumn() //--Para Borrado Lógico--//
+  deleteAt: Date;
+  static clave: string;
+
 }

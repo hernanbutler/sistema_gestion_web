@@ -7,8 +7,10 @@ import {
   Post,
   UseInterceptors,
 } from '@nestjs/common';
-import { RqRegisterUserDto, RsRegisterUserDto } from './dtos';
+import { RqRegisterUserDto, RsLoginUserDto, RsRegisterUserDto } from './dtos';
 import { REGISTER_FACTORY_SERVICE, IRegisterFactory } from './interfaces';
+import { RqLoginUserDto } from './dtos/rq-login-user.dto';
+import { ILoginFactory, LOGIN_FACTORY_SERVICE } from './interfaces/login-factory.interface';
 
 @Controller()
 @UseInterceptors(ClassSerializerInterceptor)
@@ -18,6 +20,10 @@ export class AuthController {
 
     @Inject(REGISTER_FACTORY_SERVICE)
     private readonly registerFactoryService: IRegisterFactory,
+
+    @Inject(LOGIN_FACTORY_SERVICE)
+    private readonly loginFactoryService: ILoginFactory,
+
   ) {}
 
   @Post('register')
@@ -28,4 +34,18 @@ export class AuthController {
       this.registerFactoryService.DTORequesttoRegisterEntity(registerUserDto);
     return await this.authService.register(registerData);
   }
+
+  
+
+  @Post('login')
+  async login(
+    @Body() loginDto: RqLoginUserDto,
+  ): Promise<RsLoginUserDto> {
+    const login =
+      this.loginFactoryService.DTORequesttoLoginEntity(loginDto);
+    return await this.authService.login(login);
+  }
+
+
+
 }

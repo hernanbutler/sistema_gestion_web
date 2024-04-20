@@ -4,6 +4,9 @@ import { RouterModule } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { AuthModule } from "./modules/auth/auth.module";
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants} from './modules/auth/auth.constants';
+
 
 @Module({
   imports: [
@@ -26,6 +29,12 @@ import { AuthModule } from "./modules/auth/auth.module";
       }),
     }),
     AuthModule,
+    AuthModule,JwtModule.register({
+      global: true,
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '24h' },
+
+    }),
     RouterModule.register([
       {
         path: "auth",
