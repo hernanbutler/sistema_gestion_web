@@ -1,13 +1,13 @@
 import { ActivityService } from "./activity.service";
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Put } from "@nestjs/common";
-import { CrearActividad, UpdateActividad } from "./dtos";
+import { CrearActividadDto, UpdateActividadDto } from "./dtos";
 
 @Controller()
 export class ActivityController{
     constructor(private readonly activityService: ActivityService){    }
 
     @Post()
-    crearActividad(@Body() nuevaActividad: CrearActividad){
+    crearActividad(@Body() nuevaActividad: CrearActividadDto){
         return this.activityService.crearActividad(nuevaActividad);
     }
 
@@ -23,7 +23,7 @@ export class ActivityController{
 
     @Patch(':id')
     updateActividad(@Param('id', ParseIntPipe) id:number,
-        @Body() actividad: UpdateActividad){
+        @Body() actividad: UpdateActividadDto){
         return this.activityService.updateActividad(id, actividad);
     }
 }

@@ -2,7 +2,7 @@ import { IsEnum, IsNotEmpty, IsString } from "class-validator"
 import { Estado, Prioridad } from "../enum"
 import { UserEntity } from "src/modules/auth/entities"
 
-export class UpdateActividad{
+export class UpdateActividadDto{
     @IsNotEmpty()
     @IsString()
     descripcion?: string

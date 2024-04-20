@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { CrearActividad, UpdateActividad } from "./dtos";
+import { CrearActividadDto, UpdateActividadDto } from "./dtos";
 
 @Injectable()
 export class ActivityService{
-    crearActividad(nuevaActividad: CrearActividad){
+    crearActividad(nuevaActividad: CrearActividadDto){
 
     }
 
@@ -15,7 +15,7 @@ export class ActivityService{
 
     }
 
-    updateActividad(id:number, actividad: UpdateActividad){
+    updateActividad(id:number, actividad: UpdateActividadDto){
         
     }
 }

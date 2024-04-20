@@ -2,12 +2,16 @@ import { IsEnum, IsNotEmpty, IsString } from "class-validator"
 import { Estado, Prioridad } from "../enum"
 import { UserEntity } from "src/modules/auth/entities"
 
-export class CrearActividad{
-    @IsNotEmpty()
+export class CrearActividadDto{
+    @IsNotEmpty({
+        message: 'Debe agregar una descripción.'
+    })
     @IsString()
     descripcion: string
 
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Debe seleccionar una prioridad.'
+    })
     @IsEnum(Prioridad)
     prioridad: Prioridad
 
@@ -15,6 +19,8 @@ export class CrearActividad{
     @IsEnum(Estado)
     estado: Estado
 
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Debe asignar un usuario a la actividad.'
+    })
     usuario_asignado: UserEntity
 }
