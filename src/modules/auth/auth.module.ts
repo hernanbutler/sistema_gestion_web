@@ -1,33 +1,36 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { JwtModule } from "@nestjs/jwt";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
 
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { UserEntity } from './entities';
-import { ENCRYPT_SERVICE, REGISTER_FACTORY_SERVICE } from './interfaces';
-import { EncryptService, RegisterFactoryService } from './services';
+import { UserEntity } from "./entities";
+import {
+  ENCRYPT_SERVICE,
+  JWT_TOKEN_SERVICE,
+  LOGIN_FACTORY_SERVICE,
+  REGISTER_FACTORY_SERVICE,
+} from "./interfaces";
+import {
+  EncryptService,
+  JwtTokenService,
+  LoginFactoryService,
+  RegisterFactoryService,
+} from "./services";
+import { AuthController } from "./auth.controller";
+import { AuthService } from "./auth.service";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: '.env',
-      isGlobal: true,
-    }),
-    TypeOrmModule.forRootAsync({
+    JwtModule.registerAsync({
       imports: [ConfigModule],
-      inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PASS'),
-        database: configService.get('DB_DATABASE'),
-        entities: [UserEntity],
-        synchronize: configService.get('DB_SYNC').toLowerCase() == 'true',
+        secret: configService.get("JWT_SECRET_KEY"),
+        signOptions: {
+          expiresIn: configService.get("JWT_EXPIRESION_KEY"),
+        },
       }),
+      inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([UserEntity]),
   ],
@@ -39,8 +42,17 @@ import { EncryptService, RegisterFactoryService } from './services';
       provide: ENCRYPT_SERVICE,
     },
     {
+      useClass: JwtTokenService,
+      provide: JWT_TOKEN_SERVICE,
+    },
+    {
       useClass: RegisterFactoryService,
       provide: REGISTER_FACTORY_SERVICE,
+    },
+
+    {
+      useClass: LoginFactoryService,
+      provide: LOGIN_FACTORY_SERVICE,
     },
   ],
 })

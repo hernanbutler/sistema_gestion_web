@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
 import { Estado, Rol } from "../common/enums";
 
 @Entity({ name: "usuarios" })
@@ -10,7 +11,7 @@ export class UserEntity {
   email: string;
 
   @Column({ length: 72 })
-  clave: string;
+  password: string;
 
   @Column({ nullable: true })
   apellidos?: string;
