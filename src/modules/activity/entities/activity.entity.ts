@@ -8,9 +8,9 @@ import {
 } from "typeorm";
 
 import { UserEntity } from "@modules/auth/entities";
-import { Prioridad, Estado } from "../common/enum";
+import { Prioridad, Estado } from "../../../common/enum";
 
-@Entity({ name: "actividad" })
+@Entity({ name: "actividades" })
 export class ActivityEntity {
   @PrimaryGeneratedColumn()
   id: number;

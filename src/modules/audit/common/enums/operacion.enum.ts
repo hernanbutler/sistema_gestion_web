@@ -1,0 +1,5 @@
+export enum Operacion {
+  CREACION = "CREACION",
+  MODIFICACION = "MODIFICACION",
+  ELIMINACION = "ELIMINACION",
+}
