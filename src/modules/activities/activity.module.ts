@@ -6,11 +6,7 @@ import { ActivityEntity } from "./entities/activity.entity";
 
 
 @Module({
-    imports: [
-        // TypeOrmModule.forFeature([
-        //     ActivityEntity
-        // ])
-    ],
+    imports: [TypeOrmModule.forFeature([ActivityEntity])],
     controllers: [ActivityController],
     providers: [ActivityService],
 })
