@@ -35,14 +35,14 @@ export class AuthService {
   ) {}
 
   async login(userEntity: UserEntity): Promise<RsLoginUserDto> {
-    let loginUserDto: RsLoginUserDto;
+    let loginDto: RsLoginUserDto;
 
     try {
       const loginUserDB = await this.userRepository.findOneBy({
         email: userEntity.email,
       });
 
-      loginUserDto =
+      loginDto =
         loginUserDB !== null
           ? (await this.encryptService.compare(
               userEntity.password,
@@ -64,18 +64,18 @@ export class AuthService {
               null
             );
     } catch (err) {
-      loginUserDto = this.loginFactoryService.LoginEntitytoDTOResponse(
+      loginDto = this.loginFactoryService.LoginEntitytoDTOResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "Error en el servidor",
         null
       );
     }
 
-    return loginUserDto;
+    return loginDto;
   }
 
   async register(userEntity: UserEntity): Promise<RsRegisterUserDto> {
-    let registerUserDto: RsRegisterUserDto;
+    let registerDto: RsRegisterUserDto;
 
     try {
       userEntity.password = await this.encryptService.encrypt(
@@ -84,7 +84,7 @@ export class AuthService {
 
       const registerUserDB = await this.userRepository.save(userEntity);
 
-      registerUserDto =
+      registerDto =
         registerUserDB !== null
           ? this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.CREATED,
@@ -95,7 +95,7 @@ export class AuthService {
               "Error al registrar el usuario"
             );
     } catch (err) {
-      registerUserDto =
+      registerDto =
         err.code && err.code === "ER_DUP_ENTRY"
           ? this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.CONFLICT,
@@ -107,6 +107,6 @@ export class AuthService {
             );
     }
 
-    return registerUserDto;
+    return registerDto;
   }
 }
