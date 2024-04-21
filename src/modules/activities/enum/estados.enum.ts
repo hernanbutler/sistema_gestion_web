@@ -1,5 +1,0 @@
-export enum Estado{
-    PENDIENTE = 'PENDIENTE',
-    FINALIZADO = 'FINALIZADO',
-    ELIMINADO = 'ELIMINADO'
-}

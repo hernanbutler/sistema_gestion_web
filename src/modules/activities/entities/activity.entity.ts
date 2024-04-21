@@ -1,21 +1,40 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { UserEntity } from "../../auth/entities";
-import { Prioridad, Estado } from "../enum";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  UpdateDateColumn,
+  ManyToOne,
+} from "typeorm";
+
+import { UserEntity } from "@modules/auth/entities";
+import { Prioridad, Estado } from "../common/enum";
 
 @Entity({ name: "actividad" })
-export class ActivityEntity{
-    @PrimaryGeneratedColumn()
-    id: number;
+export class ActivityEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    descripcion: string;
+  @Column()
+  descripcion: string;
 
-    @Column({ type: 'enum', enum: Prioridad})
-    prioridad: Prioridad;
-    
-    @Column({ type: 'enum', enum: Estado, default: Estado.PENDIENTE })
-    estado: Estado;
-    
-    @ManyToOne(() => UserEntity, usuario => usuario.id)
-    usuario_asignado: UserEntity;
+  @ManyToOne(() => UserEntity)
+  @JoinColumn({ name: "id_usuario_original" })
+  usuarioOriginal: number;
+
+  @Column({ type: "enum", enum: Prioridad })
+  prioridad: Prioridad;
+
+  @ManyToOne(() => UserEntity)
+  @JoinColumn({ name: "id_usuario_actual" })
+  usuarioActual: number;
+
+  @UpdateDateColumn({
+    type: "timestamp",
+    name: "fecha_modificacion",
+  })
+  fechaModificacion: Date;
+
+  @Column({ type: "enum", enum: Estado, default: Estado.PENDIENTE })
+  estado: Estado;
 }

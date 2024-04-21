@@ -1,66 +1,117 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { CrearActividadDto, UpdateActividadDto } from "./dtos";
-import { ActivityEntity } from "./entities/activity.entity";
-import e from "express";
+import {
+  RqGetActivityDto,
+  RsGetActivityDto,
+  RsGetActivitiesDto,
+  RsCreateActivityDto,
+  RsUpdateActivityDto,
+  RqDeleteActivityDto,
+  RsDeleteActivityDto,
+} from "./dtos";
+import { ActivityEntity } from "./entities";
+import { ACTIVITY_FACTORY_SERVICE, IActivityFactory } from "./interfaces";
 
 @Injectable()
-export class ActivityService{
-    constructor(@InjectRepository(ActivityEntity) private actividadRepositorio: Repository<ActivityEntity>){}
+export class ActivityService {
+  constructor(
+    @InjectRepository(ActivityEntity)
+    private readonly activityRepository: Repository<ActivityEntity>,
 
-    async createActividad(nuevaActividad: CrearActividadDto){
-        const existe = await this.actividadRepositorio.findOne({where:
-            { descripcion: nuevaActividad.descripcion }
-        });
+    @Inject(ACTIVITY_FACTORY_SERVICE)
+    private readonly activityFactoryService: IActivityFactory
+  ) {}
 
-        if(existe){
-            return new HttpException('La actividad ya existe', HttpStatus.CONFLICT);
-        }
+  async getActivity(
+    rqGetActivityDto: RqGetActivityDto
+  ): Promise<RsGetActivityDto> {
+    let getActivityDto: RsGetActivityDto;
 
-        const actividadNueva = this.actividadRepositorio.create(nuevaActividad);
-        
-        return this.actividadRepositorio.save(actividadNueva);
+    try {
+      // Implementar Get Activity
+    } catch (err) {
+      getActivityDto =
+        this.activityFactoryService.ActivityEntitytoDTOGetActivityResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          "Error al obtener actividad",
+          null
+        );
     }
 
-    getActividades(){
-        return this.actividadRepositorio.find();
+    return getActivityDto;
+  }
+
+  async getActivities(): Promise<RsGetActivitiesDto> {
+    let getActivitiesDto: RsGetActivitiesDto;
+
+    try {
+      // Implementar Get Activities
+    } catch (err) {
+      getActivitiesDto =
+        this.activityFactoryService.ActivityEntitytoDTOGetActivitiesResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          "Error al obtener actividades",
+          null
+        );
     }
 
-    async getActividad(id: number){
-        const actividad = await this.actividadRepositorio.findOne({where:
-                { id }
-        });
+    return getActivitiesDto;
+  }
 
-        if(!actividad){
-            return new HttpException('La actividad no existe', HttpStatus.NOT_FOUND);
-        }
+  async createActivity(
+    activityEntity: ActivityEntity
+  ): Promise<RsCreateActivityDto> {
+    let createActivitiesDto: RsCreateActivityDto;
 
-        return actividad;
+    try {
+      // Implementar Create Activity
+    } catch (err) {
+      createActivitiesDto =
+        this.activityFactoryService.ActivityEntitytoDTOCreateActivityResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          "Error al crear actividad"
+        );
     }
 
-    async updateActividad(id:number, actividad: UpdateActividadDto){
-        const existe = await this.actividadRepositorio.findOne({where:
-            { id }
-        });
+    return createActivitiesDto;
+  }
 
-        if(!existe){
-            return new HttpException('La actividad no existe', HttpStatus.NOT_FOUND);
-        }
+  async updateActivity(
+    id: number,
+    activityEntity: ActivityEntity
+  ): Promise<RsUpdateActivityDto> {
+    let updateActivityDto: RsUpdateActivityDto;
 
-        return this.actividadRepositorio.update({id}, actividad);
+    try {
+      // Implementar Update Activity
+    } catch (err) {
+      updateActivityDto =
+        this.activityFactoryService.ActivityEntitytoDTOUpdateActivityResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          "Error al actualizar actividad"
+        );
     }
 
-    async deleteActividad(id: number){
-        const existe  = await this.actividadRepositorio.findOne({where:
-            { id }
-        });
+    return updateActivityDto;
+  }
 
-        if(!existe){
-            return new HttpException('La actividad no existe', HttpStatus.NOT_FOUND);
-        }
+  async deleteActivity(
+    rqDeleteActivityDto: RqDeleteActivityDto
+  ): Promise<RsDeleteActivityDto> {
+    let deleteActivityDto: RsDeleteActivityDto;
 
-        return this.actividadRepositorio.softDelete({id});
+    try {
+      // Implementar Delete Activity
+    } catch (err) {
+      deleteActivityDto =
+        this.activityFactoryService.ActivityEntitytoDTODeleteActivityResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          "Error al eliminar actividad"
+        );
     }
+
+    return deleteActivityDto;
+  }
 }

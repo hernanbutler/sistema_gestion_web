@@ -1,34 +1,78 @@
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Delete,
+  Inject,
+  Patch,
+} from "@nestjs/common";
+
+import {
+  RsGetActivityDto,
+  RsGetActivitiesDto,
+  RqCreateActivityDto,
+  RsCreateActivityDto,
+  RqUpdateActivityDto,
+  RsUpdateActivityDto,
+  RsDeleteActivityDto,
+} from "./dtos";
+import { ACTIVITY_FACTORY_SERVICE, IActivityFactory } from "./interfaces";
 import { ActivityService } from "./activity.service";
-import { Body, Controller, Post, Get, Patch, Delete, Param, ParseIntPipe } from "@nestjs/common";
-import { CrearActividadDto, UpdateActividadDto } from "./dtos";
 
-@Controller('actividades')
-export class ActivityController{
-    constructor(private readonly activityService: ActivityService){    }
+@Controller()
+export class ActivityController {
+  constructor(
+    private readonly activityService: ActivityService,
 
-    @Post()
-    createActividad(@Body() nuevaActividad: CrearActividadDto){
-        return this.activityService.createActividad(nuevaActividad);
-    }
+    @Inject(ACTIVITY_FACTORY_SERVICE)
+    private readonly activityFactoryService: IActivityFactory
+  ) {}
 
-    @Get()
-    getActividades(){
-        return this.activityService.getActividades();
-    }
+  @Get(":id")
+  async getActivity(@Param("id") id: string): Promise<RsGetActivityDto> {
+    const rqGetActivityDto = this.activityFactoryService.createGetRequestDTO(
+      parseInt(id)
+    );
+    return await this.activityService.getActivity(rqGetActivityDto);
+  }
 
-    @Get(':id')
-    getActividad(@Param('id', ParseIntPipe) id:number){
-        return this.activityService.getActividad(id);
-    }
+  @Get()
+  async getActivities(): Promise<RsGetActivitiesDto> {
+    return await this.activityService.getActivities();
+  }
 
-    @Patch(':id')
-    updateActividad(@Param('id', ParseIntPipe) id:number,
-        @Body() actividad: UpdateActividadDto){
-        return this.activityService.updateActividad(id, actividad);
-    }
+  @Post()
+  async createActivity(
+    @Body() rqCreateActivityDto: RqCreateActivityDto
+  ): Promise<RsCreateActivityDto> {
+    const activityData =
+      this.activityFactoryService.DTORequesttoCreateActivityEntity(
+        rqCreateActivityDto
+      );
+    return await this.activityService.createActivity(activityData);
+  }
 
-    @Delete(':id')
-    eliminarActividad(@Param('id', ParseIntPipe) id: number){
-        return this.activityService.deleteActividad(id);
-    }
+  @Patch(":id")
+  async updateActivity(
+    @Param("id") id: string,
+    @Body() rqUpdateActivityDto: RqUpdateActivityDto
+  ): Promise<RsUpdateActivityDto> {
+    const activityData =
+      this.activityFactoryService.DTORequesttoUpdateActivityEntity(
+        rqUpdateActivityDto
+      );
+    return await this.activityService.updateActivity(
+      parseInt(id),
+      activityData
+    );
+  }
+
+  @Delete(":id")
+  async deleteActivity(@Param("id") id: string): Promise<RsDeleteActivityDto> {
+    const RqDeleteActivityDto =
+      this.activityFactoryService.createDeleteRequestDTO(parseInt(id));
+    return await this.activityService.deleteActivity(RqDeleteActivityDto);
+  }
 }

@@ -3,8 +3,8 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { RouterModule } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-import { AuthModule } from './modules/auth/auth.module';
-import { ActivityModule } from './modules/activities/activity.module';
+import { AuthModule } from "./modules/auth/auth.module";
+import { ActivityModule } from "./modules/activities/activity.module";
 
 @Module({
   imports: [
@@ -26,14 +26,18 @@ import { ActivityModule } from './modules/activities/activity.module';
         synchronize: configService.get("DB_SYNC").toLowerCase() == "true",
       }),
     }),
+    ActivityModule,
     AuthModule,
     RouterModule.register([
+      {
+        path: "activity",
+        module: ActivityModule,
+      },
       {
         path: "auth",
         module: AuthModule,
       },
     ]),
-    ActivityModule,
   ],
 })
 export class AppModule {}
