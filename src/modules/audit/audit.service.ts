@@ -1,10 +1,9 @@
 import { HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { ObjectLiteral, Repository } from "typeorm";
 
-import { ActivityEntity } from "@modules/activity/entities";
 import { Operacion } from "./common/enums";
-import { RqGetAuditDto, RsGetAuditDto, RsGetAuditsDto } from "./dtos";
+import { RsGetAuditDto, RsGetAuditsDto } from "./dtos";
 import { AuditEntity } from "./entities";
 import { AUDIT_FACTORY_SERVICE, IAuditFactory } from "./interfaces";
 
@@ -18,15 +17,13 @@ export class AuditService {
     private readonly auditFactoryService: IAuditFactory
   ) {}
 
-  async getAudit(rqGetAuditDto: RqGetAuditDto): Promise<RsGetAuditDto> {
-    let getAuditDto: RsGetAuditDto;
+  async findOne(id: number): Promise<RsGetAuditDto> {
+    let auditDto: RsGetAuditDto;
 
     try {
-      const auditDB = await this.auditRepository.findOneBy({
-        id: rqGetAuditDto.id,
-      });
+      const auditDB = await this.auditRepository.findOne({ where: { id } });
 
-      getAuditDto =
+      auditDto =
         auditDB !== null
           ? this.auditFactoryService.AuditEntitytoDTOGetAuditResponse(
               HttpStatus.OK,
@@ -39,47 +36,48 @@ export class AuditService {
               null
             );
     } catch (err) {
-      getAuditDto = this.auditFactoryService.AuditEntitytoDTOGetAuditResponse(
+      auditDto = this.auditFactoryService.AuditEntitytoDTOGetAuditResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "Error al obtener auditoria",
         null
       );
     }
 
-    return getAuditDto;
+    return auditDto;
   }
 
-  async getAudits(): Promise<RsGetAuditsDto> {
-    let getAuditsDto: RsGetAuditsDto;
+  async findAll(): Promise<RsGetAuditsDto> {
+    let auditDto: RsGetAuditsDto;
 
     try {
       const auditsDB = await this.auditRepository.find();
 
-      getAuditsDto = this.auditFactoryService.AuditEntitytoDTOGetAuditsResponse(
+      auditDto = this.auditFactoryService.AuditEntitytoDTOGetAuditsResponse(
         HttpStatus.OK,
         "",
         auditsDB
       );
     } catch (err) {
-      getAuditsDto = this.auditFactoryService.AuditEntitytoDTOGetAuditsResponse(
+      auditDto = this.auditFactoryService.AuditEntitytoDTOGetAuditsResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "Error al obtener auditorias",
         null
       );
     }
 
-    return getAuditsDto;
+    return auditDto;
   }
 
-  async createAudit(
-    activityEntity: ActivityEntity,
-    operacion: Operacion
-  ): Promise<void> {
-    const auditEntity = this.auditFactoryService.DTORequesttoCreateAuditEntity(
-      activityEntity,
-      operacion
-    );
+  async create(data: ObjectLiteral, operacion: Operacion): Promise<void> {
+    try {
+      const auditEntity = this.auditFactoryService.createAuditEntity(
+        data,
+        operacion
+      );
 
-    await this.auditRepository.save(auditEntity);
+      await this.auditRepository.save(auditEntity);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

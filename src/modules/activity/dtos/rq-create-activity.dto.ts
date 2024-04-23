@@ -6,7 +6,7 @@ import {
   IsString,
 } from "class-validator";
 
-import { Estado, Prioridad } from "../../../common/enum";
+import { Estado, Prioridad } from "src/common/enum";
 
 export class RqCreateActivityDto {
   @IsEmpty()
@@ -20,10 +20,6 @@ export class RqCreateActivityDto {
   @IsNotEmpty()
   @IsEnum(Prioridad)
   prioridad: Prioridad;
-
-  @IsNotEmpty()
-  @IsNumber()
-  usuarioActual: number;
 
   @IsNotEmpty()
   @IsEnum(Estado)

@@ -9,6 +9,7 @@ import { AuditService } from "./audit.service";
 
 @Module({
   imports: [TypeOrmModule.forFeature([AuditEntity])],
+  exports: [AuditService],
   controllers: [AuditController],
   providers: [
     AuditService,

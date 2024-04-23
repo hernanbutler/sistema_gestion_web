@@ -1,6 +1,6 @@
 import { IsEnum, IsNumber, IsString } from "class-validator";
 
-import { Estado, Prioridad } from "../../../common/enum";
+import { Estado, Prioridad } from "src/common/enum";
 
 export class RqUpdateActivityDto {
   @IsString()

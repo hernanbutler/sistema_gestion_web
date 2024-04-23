@@ -3,13 +3,13 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import {
-  RqGetActivityDto,
   RsGetActivityDto,
   RsGetActivitiesDto,
   RsCreateActivityDto,
   RsUpdateActivityDto,
-  RqDeleteActivityDto,
   RsDeleteActivityDto,
+  RqCreateActivityDto,
+  RqUpdateActivityDto,
 } from "./dtos";
 import { ActivityEntity } from "./entities";
 import { ACTIVITY_FACTORY_SERVICE, IActivityFactory } from "./interfaces";
@@ -24,15 +24,31 @@ export class ActivityService {
     private readonly activityFactoryService: IActivityFactory
   ) {}
 
-  async getActivity(
-    rqGetActivityDto: RqGetActivityDto
-  ): Promise<RsGetActivityDto> {
-    let getActivityDto: RsGetActivityDto;
+  async create(
+    rqCreateActivityDto: RqCreateActivityDto
+  ): Promise<RsCreateActivityDto> {
+    let activityDto: RsCreateActivityDto;
 
     try {
-      // Implementar Get Activity
+      // Implementar Create
     } catch (err) {
-      getActivityDto =
+      activityDto =
+        this.activityFactoryService.ActivityEntitytoDTOCreateActivityResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          "Error al crear actividad"
+        );
+    }
+
+    return activityDto;
+  }
+
+  async findOne(id: number): Promise<RsGetActivityDto> {
+    let activityDto: RsGetActivityDto;
+
+    try {
+      // Implementar FindOne
+    } catch (err) {
+      activityDto =
         this.activityFactoryService.ActivityEntitytoDTOGetActivityResponse(
           HttpStatus.INTERNAL_SERVER_ERROR,
           "Error al obtener actividad",
@@ -40,16 +56,16 @@ export class ActivityService {
         );
     }
 
-    return getActivityDto;
+    return activityDto;
   }
 
-  async getActivities(): Promise<RsGetActivitiesDto> {
-    let getActivitiesDto: RsGetActivitiesDto;
+  async findAll(): Promise<RsGetActivitiesDto> {
+    let activityDto: RsGetActivitiesDto;
 
     try {
-      // Implementar Get Activities
+      // Implementar FindAll
     } catch (err) {
-      getActivitiesDto =
+      activityDto =
         this.activityFactoryService.ActivityEntitytoDTOGetActivitiesResponse(
           HttpStatus.INTERNAL_SERVER_ERROR,
           "Error al obtener actividades",
@@ -57,61 +73,41 @@ export class ActivityService {
         );
     }
 
-    return getActivitiesDto;
+    return activityDto;
   }
 
-  async createActivity(
-    activityEntity: ActivityEntity
-  ): Promise<RsCreateActivityDto> {
-    let createActivitiesDto: RsCreateActivityDto;
-
-    try {
-      // Implementar Create Activity
-    } catch (err) {
-      createActivitiesDto =
-        this.activityFactoryService.ActivityEntitytoDTOCreateActivityResponse(
-          HttpStatus.INTERNAL_SERVER_ERROR,
-          "Error al crear actividad"
-        );
-    }
-
-    return createActivitiesDto;
-  }
-
-  async updateActivity(
+  async update(
     id: number,
-    activityEntity: ActivityEntity
+    rqUpdateActivityDto: RqUpdateActivityDto
   ): Promise<RsUpdateActivityDto> {
-    let updateActivityDto: RsUpdateActivityDto;
+    let activityDto: RsUpdateActivityDto;
 
     try {
-      // Implementar Update Activity
+      // Implementar Update
     } catch (err) {
-      updateActivityDto =
+      activityDto =
         this.activityFactoryService.ActivityEntitytoDTOUpdateActivityResponse(
           HttpStatus.INTERNAL_SERVER_ERROR,
           "Error al actualizar actividad"
         );
     }
 
-    return updateActivityDto;
+    return activityDto;
   }
 
-  async deleteActivity(
-    rqDeleteActivityDto: RqDeleteActivityDto
-  ): Promise<RsDeleteActivityDto> {
-    let deleteActivityDto: RsDeleteActivityDto;
+  async remove(id: number): Promise<RsDeleteActivityDto> {
+    let activityDto: RsDeleteActivityDto;
 
     try {
-      // Implementar Delete Activity
+      // Implementar Remove
     } catch (err) {
-      deleteActivityDto =
+      activityDto =
         this.activityFactoryService.ActivityEntitytoDTODeleteActivityResponse(
           HttpStatus.INTERNAL_SERVER_ERROR,
           "Error al eliminar actividad"
         );
     }
 
-    return deleteActivityDto;
+    return activityDto;
   }
 }

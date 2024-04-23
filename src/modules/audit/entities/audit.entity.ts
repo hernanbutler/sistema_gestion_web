@@ -1,13 +1,10 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-import { ActivityEntity } from "@modules/activity/entities";
-import { UserEntity } from "@modules/auth/entities";
 import { Operacion } from "../common/enums";
 import { Prioridad, Estado } from "src/common/enum";
 
@@ -16,25 +13,26 @@ export class AuditEntity {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @OneToOne(() => ActivityEntity)
-  @JoinColumn({ name: "id_actividad" })
+  @Column({ name: "id_actividad" })
   actividad: number;
 
-  @Column()
+  @Column({ nullable: true })
   descripcion: string;
 
-  @OneToOne(() => UserEntity)
-  @JoinColumn({ name: "id_usuario_original" })
+  @Column({ name: "id_usuario_original" })
   usuarioOriginal: number;
 
   @Column({ type: "enum", enum: Prioridad })
   prioridad: Prioridad;
 
-  @OneToOne(() => UserEntity)
-  @JoinColumn({ name: "id_usuario_Actual" })
+  @Column({ name: "id_usuario_Actual" })
   usuarioActual: number;
 
-  @Column({ type: "timestamp", name: "fecha_modificacion" })
+  @CreateDateColumn({
+    type: "timestamp",
+    name: "fecha_modificacion",
+    default: () => "CURRENT_TIMESTAMP(6)",
+  })
   fechaModificacion: Date;
 
   @Column({ type: "enum", enum: Estado })

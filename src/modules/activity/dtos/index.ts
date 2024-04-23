@@ -1,6 +1,4 @@
 export { RqCreateActivityDto } from "./rq-create-activity.dto";
-export { RqDeleteActivityDto } from "./rq-delete-activity.dto";
-export { RqGetActivityDto } from "./rq-get-activity.dto";
 export { RqUpdateActivityDto } from "./rq-update-activity.dto";
 export { RsCreateActivityDto } from "./rs-create-activity.dto";
 export { RsDeleteActivityDto } from "./rs-delete-activity.dto";

@@ -1,16 +1,13 @@
-import { ActivityEntity } from "@modules/activity/entities";
+import { ObjectLiteral } from "typeorm";
+
 import { Operacion } from "../common/enums";
-import { RqGetAuditDto, RsGetAuditDto, RsGetAuditsDto } from "../dtos";
+import { RsGetAuditDto, RsGetAuditsDto } from "../dtos";
 import { AuditEntity } from "../entities";
 
 export const AUDIT_FACTORY_SERVICE = "AUDIT_FACTORY_SERVICE";
 
 export interface IAuditFactory {
-  createGetRequestDTO(id: number): RqGetAuditDto;
-  DTORequesttoCreateAuditEntity(
-    activityEntity: ActivityEntity,
-    operacion: Operacion
-  ): AuditEntity;
+  createAuditEntity(data: ObjectLiteral, operacion: Operacion): AuditEntity;
   AuditEntitytoDTOGetAuditResponse(
     statusCode: number,
     message: string,

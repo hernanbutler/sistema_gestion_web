@@ -1,10 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
 import {
-  RqGetActivityDto,
-  RqDeleteActivityDto,
   RqCreateActivityDto,
-  RqUpdateActivityDto,
   RsGetActivityDto,
   RsGetActivitiesDto,
   RsCreateActivityDto,
@@ -16,14 +13,6 @@ import { IActivityFactory } from "../interfaces";
 
 @Injectable()
 export class ActivityFactoryService implements IActivityFactory {
-  createGetRequestDTO(id: number): RqGetActivityDto {
-    return new RqGetActivityDto(id);
-  }
-
-  createDeleteRequestDTO(id: number): RqDeleteActivityDto {
-    return new RqDeleteActivityDto(id);
-  }
-
   DTORequesttoCreateActivityEntity(
     rqCreateActivityDto: RqCreateActivityDto
   ): ActivityEntity {
@@ -31,20 +20,8 @@ export class ActivityFactoryService implements IActivityFactory {
     activityEntity.descripcion = rqCreateActivityDto.descripcion;
     activityEntity.usuarioOriginal = rqCreateActivityDto.usuarioOriginal;
     activityEntity.prioridad = rqCreateActivityDto.prioridad;
-    activityEntity.usuarioActual = rqCreateActivityDto.usuarioActual;
+    activityEntity.usuarioActual = rqCreateActivityDto.usuarioOriginal;
     activityEntity.estado = rqCreateActivityDto.estado;
-
-    return activityEntity;
-  }
-
-  DTORequesttoUpdateActivityEntity(
-    rqUpdateActivityDto: RqUpdateActivityDto
-  ): ActivityEntity {
-    const activityEntity = new ActivityEntity();
-    activityEntity.descripcion = rqUpdateActivityDto.descripcion;
-    activityEntity.prioridad = rqUpdateActivityDto.prioridad;
-    activityEntity.usuarioActual = rqUpdateActivityDto.usuarioActual;
-    activityEntity.estado = rqUpdateActivityDto.estado;
 
     return activityEntity;
   }
