@@ -8,30 +8,36 @@ import {
 } from "typeorm";
 
 import { UserEntity } from "@modules/auth/entities";
-import { Prioridad, Estado } from "../common/enum";
+import { Prioridad, Estado } from "src/common/enum";
 
-@Entity({ name: "actividad" })
+@Entity({ name: "actividades" })
 export class ActivityEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   descripcion: string;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, {
+    eager: true,
+  })
   @JoinColumn({ name: "id_usuario_original" })
   usuarioOriginal: number;
 
   @Column({ type: "enum", enum: Prioridad })
   prioridad: Prioridad;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, {
+    eager: true,
+  })
   @JoinColumn({ name: "id_usuario_actual" })
   usuarioActual: number;
 
   @UpdateDateColumn({
     type: "timestamp",
     name: "fecha_modificacion",
+    default: () => "CURRENT_TIMESTAMP(6)",
+    onUpdate: "CURRENT_TIMESTAMP(6)",
   })
   fechaModificacion: Date;
 

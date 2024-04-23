@@ -5,7 +5,6 @@ import {
   Post,
   Body,
   Delete,
-  Inject,
   Patch,
 } from "@nestjs/common";
 
@@ -18,61 +17,39 @@ import {
   RsUpdateActivityDto,
   RsDeleteActivityDto,
 } from "./dtos";
-import { ACTIVITY_FACTORY_SERVICE, IActivityFactory } from "./interfaces";
 import { ActivityService } from "./activity.service";
 
 @Controller()
 export class ActivityController {
-  constructor(
-    private readonly activityService: ActivityService,
+  constructor(private readonly activityService: ActivityService) {}
 
-    @Inject(ACTIVITY_FACTORY_SERVICE)
-    private readonly activityFactoryService: IActivityFactory
-  ) {}
+  @Post()
+  async create(
+    @Body() rqCreateActivityDto: RqCreateActivityDto
+  ): Promise<RsCreateActivityDto> {
+    return await this.activityService.create(rqCreateActivityDto);
+  }
 
   @Get(":id")
-  async getActivity(@Param("id") id: string): Promise<RsGetActivityDto> {
-    const rqGetActivityDto = this.activityFactoryService.createGetRequestDTO(
-      parseInt(id)
-    );
-    return await this.activityService.getActivity(rqGetActivityDto);
+  async findOne(@Param("id") id: string): Promise<RsGetActivityDto> {
+    return await this.activityService.findOne(+id);
   }
 
   @Get()
-  async getActivities(): Promise<RsGetActivitiesDto> {
-    return await this.activityService.getActivities();
-  }
-
-  @Post()
-  async createActivity(
-    @Body() rqCreateActivityDto: RqCreateActivityDto
-  ): Promise<RsCreateActivityDto> {
-    const activityData =
-      this.activityFactoryService.DTORequesttoCreateActivityEntity(
-        rqCreateActivityDto
-      );
-    return await this.activityService.createActivity(activityData);
+  async findAll(): Promise<RsGetActivitiesDto> {
+    return await this.activityService.findAll();
   }
 
   @Patch(":id")
-  async updateActivity(
+  async update(
     @Param("id") id: string,
     @Body() rqUpdateActivityDto: RqUpdateActivityDto
   ): Promise<RsUpdateActivityDto> {
-    const activityData =
-      this.activityFactoryService.DTORequesttoUpdateActivityEntity(
-        rqUpdateActivityDto
-      );
-    return await this.activityService.updateActivity(
-      parseInt(id),
-      activityData
-    );
+    return await this.activityService.update(+id, rqUpdateActivityDto);
   }
 
   @Delete(":id")
-  async deleteActivity(@Param("id") id: string): Promise<RsDeleteActivityDto> {
-    const RqDeleteActivityDto =
-      this.activityFactoryService.createDeleteRequestDTO(parseInt(id));
-    return await this.activityService.deleteActivity(RqDeleteActivityDto);
+  async remove(@Param("id") id: string): Promise<RsDeleteActivityDto> {
+    return await this.activityService.remove(+id);
   }
 }
