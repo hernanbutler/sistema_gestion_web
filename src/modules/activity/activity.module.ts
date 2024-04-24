@@ -1,7 +1,10 @@
 import { Module } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { AuditModule } from "@modules/audit/audit.module";
+import { JWT_TOKEN_SERVICE } from "@modules/auth/interfaces";
+import { JwtTokenService } from "@modules/auth/services";
 import { ActivityEntity } from "./entities";
 import { ACTIVITY_FACTORY_SERVICE } from "./interfaces";
 import { ActivityFactoryService } from "./services";
@@ -15,9 +18,14 @@ import { ActivitySubscriber } from "./activity.subscriber";
   providers: [
     ActivityService,
     ActivitySubscriber,
+    JwtService,
     {
-      useClass: ActivityFactoryService,
       provide: ACTIVITY_FACTORY_SERVICE,
+      useClass: ActivityFactoryService,
+    },
+    {
+      provide: JWT_TOKEN_SERVICE,
+      useClass: JwtTokenService,
     },
   ],
 })

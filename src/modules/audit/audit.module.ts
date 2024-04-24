@@ -1,6 +1,9 @@
 import { Module } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { JWT_TOKEN_SERVICE } from "@modules/auth/interfaces";
+import { JwtTokenService } from "@modules/auth/services";
 import { AuditEntity } from "./entities";
 import { AUDIT_FACTORY_SERVICE } from "./interfaces";
 import { AuditFactoryService } from "./services";
@@ -13,9 +16,14 @@ import { AuditService } from "./audit.service";
   controllers: [AuditController],
   providers: [
     AuditService,
+    JwtService,
     {
-      useClass: AuditFactoryService,
       provide: AUDIT_FACTORY_SERVICE,
+      useClass: AuditFactoryService,
+    },
+    {
+      provide: JWT_TOKEN_SERVICE,
+      useClass: JwtTokenService,
     },
   ],
 })

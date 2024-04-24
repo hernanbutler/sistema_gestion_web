@@ -38,16 +38,16 @@ import { AuthService } from "./auth.service";
   providers: [
     AuthService,
     {
-      useClass: EncryptService,
       provide: ENCRYPT_SERVICE,
+      useClass: EncryptService,
     },
     {
-      useClass: JwtTokenService,
       provide: JWT_TOKEN_SERVICE,
+      useClass: JwtTokenService,
     },
     {
-      useClass: RegisterFactoryService,
       provide: REGISTER_FACTORY_SERVICE,
+      useClass: RegisterFactoryService,
     },
 
     {
