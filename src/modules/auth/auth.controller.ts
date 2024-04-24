@@ -21,7 +21,7 @@ import {
 } from "./interfaces";
 import { AuthService } from "./auth.service";
 
-@Controller()
+@Controller({ path: "auth" })
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(
