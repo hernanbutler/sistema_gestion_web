@@ -6,6 +6,7 @@ import {
   Body,
   Delete,
   Patch,
+  UseGuards,
 } from "@nestjs/common";
 
 import {
@@ -18,8 +19,10 @@ import {
   RsDeleteActivityDto,
 } from "./dtos";
 import { ActivityService } from "./activity.service";
+import { AuthGuard } from "@guards/auth.guard";
 
-@Controller()
+@Controller({ path: "activity" })
+@UseGuards(AuthGuard)
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}
 

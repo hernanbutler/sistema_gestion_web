@@ -30,20 +30,6 @@ import { AuthModule } from "./modules/auth/auth.module";
     ActivityModule,
     AuditModule,
     AuthModule,
-    RouterModule.register([
-      {
-        path: "activity",
-        module: ActivityModule,
-      },
-      {
-        path: "audit",
-        module: AuditModule,
-      },
-      {
-        path: "auth",
-        module: AuthModule,
-      },
-    ]),
   ],
 })
 export class AppModule {}
