@@ -22,7 +22,7 @@ export class ActivityService {
 
     @Inject(ACTIVITY_FACTORY_SERVICE)
     private readonly activityFactoryService: IActivityFactory
-  ) {}
+  ) { }
 
   async create(
     rqCreateActivityDto: RqCreateActivityDto
@@ -47,6 +47,20 @@ export class ActivityService {
 
     try {
       // Implementar FindOne
+      const activityDB = await this.activityRepository.findOne({ where: { id } });
+
+      activityDto =
+        activityDB !== null
+          ? this.activityFactoryService.ActivityEntitytoDTOGetActivityResponse(
+            HttpStatus.OK,
+            "",
+            activityDB
+          )
+          : this.activityFactoryService.ActivityEntitytoDTOGetActivityResponse(
+            HttpStatus.NOT_FOUND,
+            "La actividad no existe",
+            null
+          );
     } catch (err) {
       activityDto =
         this.activityFactoryService.ActivityEntitytoDTOGetActivityResponse(
