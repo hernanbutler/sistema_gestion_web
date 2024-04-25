@@ -9,7 +9,9 @@ import {
   UseGuards,
 } from "@nestjs/common";
 
-import { AuthGuard } from "src/guards";
+import { Roles } from "src/decorators";
+import { AuthGuard, RolesGuard } from "src/guards";
+import { Rol } from "@modules/auth/common/enums";
 import {
   RsGetActivityDto,
   RsGetActivitiesDto,
@@ -21,12 +23,14 @@ import {
 } from "./dtos";
 import { ActivityService } from "./activity.service";
 
-@Controller({ path: "activity" })
+@Controller("activity")
 @UseGuards(AuthGuard)
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}
 
   @Post()
+  @Roles(Rol.ADMINISTRADOR)
+  @UseGuards(RolesGuard)
   async create(
     @Body() rqCreateActivityDto: RqCreateActivityDto
   ): Promise<RsCreateActivityDto> {
@@ -52,6 +56,8 @@ export class ActivityController {
   }
 
   @Delete(":id")
+  @Roles(Rol.ADMINISTRADOR)
+  @UseGuards(RolesGuard)
   async remove(@Param("id") id: string): Promise<RsDeleteActivityDto> {
     return await this.activityService.remove(+id);
   }

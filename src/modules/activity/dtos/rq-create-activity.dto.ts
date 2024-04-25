@@ -9,7 +9,6 @@ import {
 import { Estado, Prioridad } from "src/common/enum";
 
 export class RqCreateActivityDto {
-  @IsEmpty()
   @IsString()
   descripcion: string;
 

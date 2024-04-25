@@ -2,7 +2,6 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
-  Inject,
   Post,
   UseInterceptors,
 } from "@nestjs/common";
@@ -13,40 +12,22 @@ import {
   RqLoginUserDto,
   RsLoginUserDto,
 } from "./dtos";
-import {
-  REGISTER_FACTORY_SERVICE,
-  IRegisterFactory,
-  LOGIN_FACTORY_SERVICE,
-  ILoginFactory,
-} from "./interfaces";
 import { AuthService } from "./auth.service";
 
-@Controller({ path: "auth" })
+@Controller("auth")
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-
-    @Inject(LOGIN_FACTORY_SERVICE)
-    private readonly loginFactoryService: ILoginFactory,
-
-    @Inject(REGISTER_FACTORY_SERVICE)
-    private readonly registerFactoryService: IRegisterFactory
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post("register")
   async register(
-    @Body() registerUserDto: RqRegisterUserDto
+    @Body() rqRegisterUserDto: RqRegisterUserDto
   ): Promise<RsRegisterUserDto> {
-    const registerData =
-      this.registerFactoryService.DTORequesttoRegisterEntity(registerUserDto);
-    return await this.authService.register(registerData);
+    return await this.authService.register(rqRegisterUserDto);
   }
 
   @Post("login")
-  async login(@Body() loginUserDto: RqLoginUserDto): Promise<RsLoginUserDto> {
-    const loginData =
-      this.loginFactoryService.DTORequesttoLoginEntity(loginUserDto);
-    return await this.authService.login(loginData);
+  async login(@Body() rqLoginUserDto: RqLoginUserDto): Promise<RsLoginUserDto> {
+    return await this.authService.login(rqLoginUserDto);
   }
 }

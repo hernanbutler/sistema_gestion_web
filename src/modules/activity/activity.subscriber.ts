@@ -17,7 +17,7 @@ export class ActivitySubscriber
 {
   constructor(
     private readonly auditService: AuditService,
-    dataSource: DataSource
+    private readonly dataSource: DataSource
   ) {
     dataSource.subscribers.push(this);
   }

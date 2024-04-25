@@ -16,7 +16,6 @@ export class AuditFactoryService implements IAuditFactory {
       data.usuarioOriginal.id ?? data.usuarioOriginal;
     auditEntity.prioridad = data.prioridad;
     auditEntity.usuarioActual = data.usuarioActual.id ?? data.usuarioActual;
-    auditEntity.fechaModificacion = data.fechaModificacion;
     auditEntity.estado = data.estado;
     auditEntity.operacion = operacion;
 

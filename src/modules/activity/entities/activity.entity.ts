@@ -15,7 +15,7 @@ export class ActivityEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column()
   descripcion: string;
 
   @ManyToOne(() => UserEntity, {

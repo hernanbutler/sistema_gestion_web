@@ -2,7 +2,12 @@ import { HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { RsLoginUserDto, RsRegisterUserDto } from "./dtos";
+import {
+  RqLoginUserDto,
+  RqRegisterUserDto,
+  RsLoginUserDto,
+  RsRegisterUserDto,
+} from "./dtos";
 import { UserEntity } from "./entities";
 import {
   ENCRYPT_SERVICE,
@@ -34,15 +39,18 @@ export class AuthService {
     private readonly registerFactoryService: IRegisterFactory
   ) {}
 
-  async login(userEntity: UserEntity): Promise<RsLoginUserDto> {
-    let loginDto: RsLoginUserDto;
+  async login(rqLoginUserDto: RqLoginUserDto): Promise<RsLoginUserDto> {
+    let authDto: RsLoginUserDto;
 
     try {
-      const loginUserDB = await this.userRepository.findOneBy({
+      const userEntity =
+        this.loginFactoryService.DTORequesttoLoginEntity(rqLoginUserDto);
+
+      const loginUserDB = await this.userRepository.findOneByOrFail({
         email: userEntity.email,
       });
 
-      loginDto =
+      authDto =
         loginUserDB !== null
           ? (await this.encryptService.compare(
               userEntity.password,
@@ -51,7 +59,7 @@ export class AuthService {
             ? this.loginFactoryService.LoginEntitytoDTOResponse(
                 HttpStatus.OK,
                 "",
-                await this.jwtTokenService.signToken(userEntity)
+                await this.jwtTokenService.signToken(loginUserDB)
               )
             : this.loginFactoryService.LoginEntitytoDTOResponse(
                 HttpStatus.FORBIDDEN,
@@ -63,28 +71,35 @@ export class AuthService {
               "Usuario Invàlido",
               null
             );
-    } catch (err) {
-      loginDto = this.loginFactoryService.LoginEntitytoDTOResponse(
+    } catch {
+      authDto = this.loginFactoryService.LoginEntitytoDTOResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "Error en el servidor",
         null
       );
     }
 
-    return loginDto;
+    return authDto;
   }
 
-  async register(userEntity: UserEntity): Promise<RsRegisterUserDto> {
-    let registerDto: RsRegisterUserDto;
+  async register(
+    rqRegisterUserDto: RqRegisterUserDto
+  ): Promise<RsRegisterUserDto> {
+    let authDto: RsRegisterUserDto;
 
     try {
+      const userEntity =
+        this.registerFactoryService.DTORequesttoRegisterEntity(
+          rqRegisterUserDto
+        );
+
       userEntity.password = await this.encryptService.encrypt(
         userEntity.password
       );
 
       const registerUserDB = await this.userRepository.save(userEntity);
 
-      registerDto =
+      authDto =
         registerUserDB !== null
           ? this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.CREATED,
@@ -95,7 +110,7 @@ export class AuthService {
               "Error al registrar el usuario"
             );
     } catch (err) {
-      registerDto =
+      authDto =
         err.code && err.code === "ER_DUP_ENTRY"
           ? this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.CONFLICT,
@@ -107,6 +122,6 @@ export class AuthService {
             );
     }
 
-    return registerDto;
+    return authDto;
   }
 }

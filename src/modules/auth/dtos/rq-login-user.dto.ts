@@ -10,5 +10,4 @@ export class RqLoginUserDto {
   @IsString()
   @MaxLength(72)
   password: string;
-
 }

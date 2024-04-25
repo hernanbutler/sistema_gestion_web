@@ -1,6 +1,5 @@
-import { RsGenericHeaderDto } from "src/dtos";
-
 import { Estado, Prioridad } from "src/common/enum";
+import { RsGenericHeaderDto } from "src/dtos";
 
 export interface RsActivityDataDto {
   id: number;
