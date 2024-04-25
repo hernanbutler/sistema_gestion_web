@@ -1,7 +1,7 @@
 import { RsGenericHeaderDto } from "src/dtos/rs-generic-header.dto";
 
-import { Operacion } from "../common/enums";
 import { Prioridad, Estado } from "src/common/enum";
+import { Operacion } from "../common/enums";
 
 export class RsGetAuditDataDto {
   actividad: number;

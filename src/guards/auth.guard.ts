@@ -26,8 +26,11 @@ export class AuthGuard implements CanActivate {
         "Usuario no autorizado"
       );
     }
+
     try {
-      await this.jwtTokenService.verifyToken(token);
+      const payload = await this.jwtTokenService.verifyToken(token);
+
+      request["user"] = payload;
     } catch {
       throw new RsGenericHeaderDto(HttpStatus.UNAUTHORIZED, "Token no válido");
     }

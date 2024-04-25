@@ -51,7 +51,7 @@ export class AuthService {
             ? this.loginFactoryService.LoginEntitytoDTOResponse(
                 HttpStatus.OK,
                 "",
-                await this.jwtTokenService.signToken(userEntity)
+                await this.jwtTokenService.signToken(loginUserDB)
               )
             : this.loginFactoryService.LoginEntitytoDTOResponse(
                 HttpStatus.FORBIDDEN,
