@@ -7,7 +7,7 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 
-import { AuthGuard } from "@guards/auth.guard";
+import { AuthGuard } from "src/guards";
 import { RsGetAuditDto, RsGetAuditsDto } from "./dtos";
 import { AuditService } from "./audit.service";
 

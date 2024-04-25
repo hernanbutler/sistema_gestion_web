@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 
+import { AuthGuard } from "src/guards";
 import {
   RsGetActivityDto,
   RsGetActivitiesDto,
@@ -19,7 +20,6 @@ import {
   RsDeleteActivityDto,
 } from "./dtos";
 import { ActivityService } from "./activity.service";
-import { AuthGuard } from "@guards/auth.guard";
 
 @Controller({ path: "activity" })
 @UseGuards(AuthGuard)
