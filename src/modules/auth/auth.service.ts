@@ -63,7 +63,7 @@ export class AuthService {
               )
             : this.loginFactoryService.LoginEntitytoDTOResponse(
                 HttpStatus.FORBIDDEN,
-                "Usuario / Contraseña incorrecto",
+                "Usuario y/o contraseña incorrecta",
                 null
               )
           : this.loginFactoryService.LoginEntitytoDTOResponse(
@@ -103,7 +103,7 @@ export class AuthService {
         registerUserDB !== null
           ? this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.CREATED,
-              "Usuario creado exitosamente"
+              null
             )
           : this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.INTERNAL_SERVER_ERROR,
@@ -114,7 +114,7 @@ export class AuthService {
         err.code && err.code === "ER_DUP_ENTRY"
           ? this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.CONFLICT,
-              "Inconsistencia detectada al registrar el usuario"
+              "Inconsistencia al registrar el usuario"
             )
           : this.registerFactoryService.RegisterEntitytoDTOResponse(
               HttpStatus.INTERNAL_SERVER_ERROR,
