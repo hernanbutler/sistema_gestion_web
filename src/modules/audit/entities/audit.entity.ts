@@ -5,8 +5,8 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-import { Operacion } from "../common/enums";
 import { Prioridad, Estado } from "src/common/enum";
+import { Operacion } from "../common/enums";
 
 @Entity({ name: "actividades_auditoria" })
 export class AuditEntity {

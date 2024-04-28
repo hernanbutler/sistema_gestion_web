@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ObjectLiteral, Repository } from "typeorm";
 
+import { RsGenericHeaderDto } from "src/dtos";
 import { Operacion } from "./common/enums";
 import { RsGetAuditDto, RsGetAuditsDto } from "./dtos";
 import { AuditEntity } from "./entities";
@@ -17,11 +18,29 @@ export class AuditService {
     private readonly auditFactoryService: IAuditFactory
   ) {}
 
+  async create(data: ObjectLiteral, operacion: Operacion): Promise<void> {
+    try {
+      const auditEntity = this.auditFactoryService.createAuditEntity(
+        data,
+        operacion
+      );
+
+      await this.auditRepository.save(auditEntity);
+    } catch {
+      throw new RsGenericHeaderDto(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Error al crear auditoria"
+      );
+    }
+  }
+
   async findOne(id: number): Promise<RsGetAuditDto> {
     let auditDto: RsGetAuditDto;
 
     try {
-      const auditDB = await this.auditRepository.findOne({ where: { id } });
+      const auditDB = await this.auditRepository.findOneOrFail({
+        where: { id },
+      });
 
       auditDto =
         auditDB !== null
@@ -35,7 +54,7 @@ export class AuditService {
               "La auditoria no existe",
               null
             );
-    } catch (err) {
+    } catch {
       auditDto = this.auditFactoryService.AuditEntitytoDTOGetAuditResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "Error al obtener auditoria",
@@ -57,7 +76,7 @@ export class AuditService {
         "",
         auditsDB
       );
-    } catch (err) {
+    } catch {
       auditDto = this.auditFactoryService.AuditEntitytoDTOGetAuditsResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "Error al obtener auditorias",
@@ -66,18 +85,5 @@ export class AuditService {
     }
 
     return auditDto;
-  }
-
-  async create(data: ObjectLiteral, operacion: Operacion): Promise<void> {
-    try {
-      const auditEntity = this.auditFactoryService.createAuditEntity(
-        data,
-        operacion
-      );
-
-      await this.auditRepository.save(auditEntity);
-    } catch (err) {
-      console.log(err);
-    }
   }
 }

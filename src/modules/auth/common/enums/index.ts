@@ -1,2 +1,2 @@
-export { Estado } from './estados.enum';
-export { Rol } from './roles.enum';
+export { Estado } from "./estado.enum";
+export { Rol } from "./rol.enum";

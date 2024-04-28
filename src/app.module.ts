@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { RouterModule } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { ActivityModule } from "./modules/activity/activity.module";
@@ -30,20 +29,6 @@ import { AuthModule } from "./modules/auth/auth.module";
     ActivityModule,
     AuditModule,
     AuthModule,
-    RouterModule.register([
-      {
-        path: "activity",
-        module: ActivityModule,
-      },
-      {
-        path: "audit",
-        module: AuditModule,
-      },
-      {
-        path: "auth",
-        module: AuthModule,
-      },
-    ]),
   ],
 })
 export class AppModule {}
