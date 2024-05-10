@@ -1,8 +1,9 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { RouterModule } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { ActivityModule } from "./modules/activity/activity.module";
+import { AuditModule } from "./modules/audit/audit.module";
 import { AuthModule } from "./modules/auth/auth.module";
 
 @Module({
@@ -17,7 +18,7 @@ import { AuthModule } from "./modules/auth/auth.module";
       useFactory: async (configService: ConfigService) => ({
         type: "mysql",
         host: configService.get("DB_HOST"),
-        port: configService.get("DB_PORT"),
+        port: +configService.get("DB_PORT"),
         username: configService.get("DB_USER"),
         password: configService.get("DB_PASS"),
         database: configService.get("DB_DATABASE"),
@@ -25,13 +26,9 @@ import { AuthModule } from "./modules/auth/auth.module";
         synchronize: configService.get("DB_SYNC").toLowerCase() == "true",
       }),
     }),
+    ActivityModule,
+    AuditModule,
     AuthModule,
-    RouterModule.register([
-      {
-        path: "auth",
-        module: AuthModule,
-      },
-    ]),
   ],
 })
 export class AppModule {}

@@ -1,4 +1,6 @@
+import { Exclude } from "class-transformer";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
 import { Estado, Rol } from "../common/enums";
 
 @Entity({ name: "usuarios" })
@@ -9,6 +11,7 @@ export class UserEntity {
   @Column({ unique: true })
   email: string;
 
+  @Exclude()
   @Column({ length: 72 })
   password: string;
 
@@ -18,12 +21,12 @@ export class UserEntity {
   @Column({ nullable: true })
   nombres?: string;
 
-  @Column({ default: Estado.ACTIVO })
+  @Column({ type: "enum", enum: Estado, default: Estado.ACTIVO })
   estado: Estado;
 
   @Column({ name: "nombre_usuario", nullable: true })
   nombreUsuario?: string;
 
-  @Column()
+  @Column({ type: "enum", enum: Rol })
   rol: Rol;
 }
