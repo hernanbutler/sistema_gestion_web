@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-
-import { AuthComponent } from '@layout/auth/auth.component';
-import { HomeComponent } from '@layout/home/home.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { AuthModule } from '@layout/auth/auth.module';
+import { HomeModule } from '@layout/home/home.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+const COMPONENTS: any = [AppComponent];
+const MODULES: any = [BrowserModule, AuthModule, HomeModule, AppRoutingModule];
+
 @NgModule({
-  declarations: [AppComponent, AuthComponent, HomeComponent],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule],
-  bootstrap: [AppComponent],
+  declarations: [COMPONENTS],
+  imports: [MODULES],
+  bootstrap: [COMPONENTS],
+  providers: [provideAnimationsAsync()],
 })
 export class AppModule {}

@@ -1,0 +1,41 @@
+.snack-bar__wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .snack-bar__content {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+    .snack-bar__icon {
+      display: flex;
+      padding: 12px 15px;
+      background-color: #d5413e;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+    .snack-bar__description {
+      color: rgb(0, 0, 0);
+    }
+  }
+  .snack-bar__close {
+    color: rgba(0, 0, 0) !important;
+
+    display: flex;
+    width: 34px;
+    align-items: center;
+    justify-content: center;
+    ::ng-deep ng-icon {
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-left: 4px;
+    }
+
+    &::before {
+      content: "";
+      border-left: 1px solid rgb(0, 0, 0, 0.4);
+      height: 25px;
+    }
+  }
+}

@@ -3,7 +3,7 @@
   @if (name !== 'password') {
   <input
     [type]="type"
-    id="name"
+    [id]="name"
     [class.has-danger]="control.invalid && (control.dirty || control.touched)"
     [formControl]="control"
   />
