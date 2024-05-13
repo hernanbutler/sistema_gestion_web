@@ -68,7 +68,7 @@ export class AuthService {
               )
           : this.loginFactoryService.LoginEntitytoDTOResponse(
               HttpStatus.NOT_FOUND,
-              "Usuario Invàlido",
+              "Usuario Inválido",
               null
             );
     } catch {

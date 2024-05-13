@@ -1,0 +1,18 @@
+<div class="snack-bar__wrap">
+  <div class="snack-bar__content">
+    <div class="snack-bar__icon">
+      <ng-icon name="matWarning" size="18px"></ng-icon>
+    </div>
+    <div class="snack-bar__description">
+      {{ data.message }}
+    </div>
+  </div>
+
+  <div class="snack-bar__close">
+    <ng-icon
+      name="matClose"
+      size="18px"
+      (click)="snackBarRef.dismiss()"
+    ></ng-icon>
+  </div>
+</div>

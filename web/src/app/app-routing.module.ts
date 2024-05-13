@@ -13,7 +13,7 @@ const routes: Routes = [
       import('@layout/auth/auth.module').then((m) => m.AuthModule),
   },
   {
-    path: 'dashboard',
+    path: 'home',
     component: HomeComponent,
     loadChildren: () =>
       import('@layout/home/home.module').then((m) => m.HomeModule),
