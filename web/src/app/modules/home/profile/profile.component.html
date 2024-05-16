@@ -1,0 +1,66 @@
+<div class="profile-content">
+  <mat-card>
+    <section class="avatar">
+      <img src="assets/images/avatar-default.png" alt="" />
+      @if(currentUser) {
+      <label for="" (click)="updateUser()">Editar perfil</label>
+      }
+    </section>
+    <section class="user-profile">
+      <form>
+        <!-- Nombre -->
+        <div class="form-field">
+          <label for="">Nombre:</label>
+          <input type="text" name="nombre" [(ngModel)]="user.nombre" />
+        </div>
+
+        <!-- Apellido -->
+        <div class="form-field">
+          <label for="">Apellido:</label>
+          <input type="text" name="apellido" [(ngModel)]="user.apellido" />
+        </div>
+
+        <!-- Email -->
+        <div class="form-field">
+          <label for="">Email:</label>
+          <input type="text" name="email" [(ngModel)]="user.email" />
+        </div>
+
+        <!-- Rol -->
+        <div class="form-field">
+          <label for="">Rol:</label>
+          <input type="text" name="rol" [(ngModel)]="user.rol" />
+        </div>
+
+        <!-- Estado -->
+        <div class="form-field">
+          <label for="">Estado:</label>
+          <ng-select
+            [ngModel]="user.estado | estado"
+            (ngModelChange)="user.estado = $event; updateEstado()"
+            [searchable]="false"
+            [clearable]="false"
+            [disabled]="!isAdmin"
+            name="estado"
+          >
+            <ng-option *ngFor="let item of estadoOption" [value]="item.ID">
+              {{ item.name }}</ng-option
+            >
+          </ng-select>
+        </div>
+      </form>
+    </section>
+
+    <a
+      >Ir a
+      <span (click)="goActivity()">{{
+        currentUser ? "Mis actividades" : "actividades del usuario"
+      }}</span></a
+    >
+    <section class="logout">
+      <button class="button-toolbar button-flat" (click)="logout()">
+        Cerrar sesión
+      </button>
+    </section>
+  </mat-card>
+</div>

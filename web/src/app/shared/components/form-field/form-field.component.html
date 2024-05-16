@@ -1,0 +1,41 @@
+<div class="form-field-content">
+  <label [for]="name">{{ label }}</label>
+  @if (name !== 'password') {
+  <input
+    [type]="type"
+    [id]="name"
+    [class.has-danger]="control.invalid && (control.dirty || control.touched)"
+    [formControl]="control"
+  />
+  } @if (name === 'password') {
+  <div class="input-group">
+    <input
+      [type]="type"
+      id="name"
+      [class.has-danger]="control.invalid && (control.dirty || control.touched)"
+      [formControl]="control"
+    />
+    <ng-icon
+      [name]="ngIcon"
+      size="14px"
+      class="toggleType"
+      (click)="onClickToggle()"
+    ></ng-icon>
+  </div>
+  } @if (control.invalid && (control.dirty || control.touched)) {
+  <small>
+    <ng-icon name="matWarningAmber" size="12px"></ng-icon>
+
+    @if (name === 'email') {
+    <span [hidden]="!control.errors?.['required']">El email es requerido</span>
+    <span [hidden]="!control.errors?.['email']">El email es invalido</span>
+    } @if (name === 'password') {
+    <span [hidden]="!control.errors?.['required']">
+      La contraseña es requerida
+    </span>
+    } @if (name === 'rol') {
+    <span [hidden]="!control.errors?.['required']"> El rol es requerido </span>
+    }
+  </small>
+  }
+</div>
