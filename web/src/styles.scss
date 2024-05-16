@@ -29,3 +29,11 @@ button.button-toolbar {
     color: rgb(255, 255, 255) !important;
   }
 }
+
+.mat-mdc-header-row {
+  --mat-table-header-container-height: 46px;
+}
+
+.mat-mdc-row {
+  --mat-table-row-item-container-height: 44px;
+}

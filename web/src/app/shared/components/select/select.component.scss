@@ -1,0 +1,18 @@
+.select-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+span.ng-option-label {
+  font-size: 14px;
+}
+
+::ng-deep .ng-select.ng-select-single .ng-select-container {
+  height: 36px;
+  width: 200px;
+}

@@ -3,12 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { ActivityComponent } from '@modules/home/activity/activity.component';
 import { AuditComponent } from '@modules/home/audit/audit.component';
 import { UserComponent } from '@modules/home/user/user.component';
-import { MyProfileComponent } from '@modules/home/my-profile/my-profile.component';
+import { ProfileComponent } from '@modules/home/profile/profile.component';
 
 const routes: Routes = [
   {
-    path: 'my-profile',
-    component: MyProfileComponent,
+    path: 'profile/:id',
+    component: ProfileComponent,
   },
   {
     path: 'users',
@@ -22,9 +22,10 @@ const routes: Routes = [
     path: 'audits',
     component: AuditComponent,
   },
+
   {
     path: '',
-    redirectTo: 'my-profile',
+    redirectTo: 'profile',
     pathMatch: 'full',
   },
 ];

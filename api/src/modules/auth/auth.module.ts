@@ -9,6 +9,7 @@ import {
   JWT_TOKEN_SERVICE,
   LOGIN_FACTORY_SERVICE,
   REGISTER_FACTORY_SERVICE,
+  USER_FACTORY_SERVICE,
 } from "./interfaces";
 import {
   DataService,
@@ -16,6 +17,7 @@ import {
   JwtTokenService,
   LoginFactoryService,
   RegisterFactoryService,
+  UserFactoryService,
 } from "./services";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
@@ -51,10 +53,13 @@ import { AuthService } from "./auth.service";
       provide: REGISTER_FACTORY_SERVICE,
       useClass: RegisterFactoryService,
     },
-
     {
       useClass: LoginFactoryService,
       provide: LOGIN_FACTORY_SERVICE,
+    },
+    {
+      useClass: UserFactoryService,
+      provide: USER_FACTORY_SERVICE,
     },
   ],
 })

@@ -2,7 +2,10 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Get,
+  Param,
   Post,
+  UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
 import {
@@ -21,8 +24,14 @@ import {
   RsRegisterUserDto,
   RqLoginUserDto,
   RsLoginUserDto,
+  RsGetUserDto,
+  RsGetUsersDto,
 } from "./dtos";
 import { AuthService } from "./auth.service";
+import { AuthGuard } from "@guards/auth.guard";
+import { RolesGuard } from "@guards/roles.guard";
+import { Roles } from "src/decorators";
+import { Rol } from "./common/enums";
 
 @ApiTags("Autenticacion")
 @Controller("auth")
@@ -63,5 +72,35 @@ export class AuthController {
     @Body() rqRegisterUserDto: RqRegisterUserDto
   ): Promise<RsRegisterUserDto> {
     return await this.authService.register(rqRegisterUserDto);
+  }
+
+  @Get(":id")
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: "Búsqueda de usuario" })
+  @ApiOkResponse({
+    type: Promise<RsGetUserDto>,
+  })
+  @ApiNotFoundResponse({
+    description: "El usuario no existe",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Error al obtener usuario",
+  })
+  async findOne(@Param("id") id: string): Promise<RsGetUserDto> {
+    return await this.authService.findOne(+id);
+  }
+
+  @Get()
+  @Roles(Rol.ADMINISTRADOR)
+  @UseGuards(AuthGuard, RolesGuard)
+  @ApiOperation({ summary: "Búsqueda de usuarios" })
+  @ApiOkResponse({
+    type: Promise<RsGetUsersDto>,
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Error al obtener usuarios",
+  })
+  async findAll(): Promise<RsGetUsersDto> {
+    return await this.authService.findAll();
   }
 }

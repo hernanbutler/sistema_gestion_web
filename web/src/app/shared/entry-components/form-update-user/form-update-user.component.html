@@ -1,0 +1,27 @@
+<div class="form-update-user-content">
+  <h2>Editar usuario</h2>
+
+  <form [formGroup]="form">
+    <div class="form-field-group">
+      <!-- FIELD NOMBRE -->
+      <app-form-field
+        [control]="nombre"
+        name="nombre"
+        label="Nombre del usuario"
+        type="nombre"
+      ></app-form-field>
+
+      <!-- FIELD PASSWORD -->
+      <app-form-field
+        [control]="apellido"
+        name="apellido"
+        label="Apellido"
+        type="apellido"
+      ></app-form-field>
+    </div>
+  </form>
+
+  <button type="submit" (click)="onSubmit()" [disabled]="form.invalid">
+    Editar usuario
+  </button>
+</div>

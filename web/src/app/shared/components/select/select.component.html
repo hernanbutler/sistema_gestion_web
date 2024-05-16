@@ -1,0 +1,14 @@
+<div class="select-content">
+  <label [for]="name">{{ label }}</label>
+
+  <ng-select
+    [formControl]="control"
+    [searchable]="false"
+    appendTo="body"
+    (change)="onChange($event)"
+  >
+    <ng-option *ngFor="let item of options" [value]="item">
+      {{ item.name }}</ng-option
+    >
+  </ng-select>
+</div>
