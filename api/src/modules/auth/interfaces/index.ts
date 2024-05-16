@@ -8,3 +8,4 @@ export {
   REGISTER_FACTORY_SERVICE,
   IRegisterFactory,
 } from "./register-factory.interface";
+export { IUserFactory, USER_FACTORY_SERVICE } from "./user-factory.interface";

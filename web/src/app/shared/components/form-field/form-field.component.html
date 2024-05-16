@@ -25,6 +25,7 @@
   } @if (control.invalid && (control.dirty || control.touched)) {
   <small>
     <ng-icon name="matWarningAmber" size="12px"></ng-icon>
+
     @if (name === 'email') {
     <span [hidden]="!control.errors?.['required']">El email es requerido</span>
     <span [hidden]="!control.errors?.['email']">El email es invalido</span>
@@ -32,6 +33,8 @@
     <span [hidden]="!control.errors?.['required']">
       La contraseña es requerida
     </span>
+    } @if (name === 'rol') {
+    <span [hidden]="!control.errors?.['required']"> El rol es requerido </span>
     }
   </small>
   }

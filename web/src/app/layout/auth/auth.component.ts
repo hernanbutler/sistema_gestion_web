@@ -7,9 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AuthComponent {
   constructor() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
-      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
     }
   }
 }

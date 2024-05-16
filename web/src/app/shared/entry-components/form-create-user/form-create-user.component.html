@@ -1,0 +1,35 @@
+<div class="form-create-user-content">
+  <h2>Crear usuario</h2>
+
+  <form [formGroup]="form">
+    <div class="form-field-group">
+      <!-- FIELD EMAIL -->
+      <app-form-field
+        [control]="email"
+        name="email"
+        label="Direccion de correo electronico"
+        type="email"
+      ></app-form-field>
+
+      <!-- FIELD PASSWORD -->
+      <app-form-field
+        [control]="password"
+        name="password"
+        label="Contraseña"
+        type="password"
+      ></app-form-field>
+
+      <!-- FIELD ROL -->
+      <app-form-field
+        [control]="rol"
+        name="rol"
+        label="Rol"
+        type="text"
+      ></app-form-field>
+    </div>
+  </form>
+
+  <button type="submit" (click)="onSubmit()" [disabled]="form.invalid">
+    Crear usuario
+  </button>
+</div>

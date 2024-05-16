@@ -2,8 +2,10 @@ import { HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { RsLoginUser } from '@shared/models';
 import { AuthService } from '@shared/services/auth.service';
+import { DataService } from '@shared/services/data.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
 
 @Component({
@@ -15,6 +17,7 @@ export class LoginComponent {
   constructor(
     private _router: Router,
     private _auth: AuthService,
+    private _data: DataService,
     private _snackbar: SnackbarService
   ) {}
 
@@ -30,8 +33,11 @@ export class LoginComponent {
           const statusCode = res.rsGenericHeaderDto.statusCode;
           if (statusCode == HttpStatusCode.Ok) {
             const token = res.rsLoginUserDataDto.token;
-            localStorage.setItem('token', token);
-            this._router.navigate(['/home']);
+            sessionStorage.setItem('token', token);
+            this._data.setUser = new JwtHelperService().decodeToken(
+              token
+            ).payload;
+            this._router.navigate(['/home/profile/' + this._data.getUser.id]);
           } else {
             this._snackbar.openSnackBar(res.rsGenericHeaderDto);
           }

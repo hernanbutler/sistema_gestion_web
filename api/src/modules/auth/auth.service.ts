@@ -5,6 +5,8 @@ import { Repository } from "typeorm";
 import {
   RqLoginUserDto,
   RqRegisterUserDto,
+  RsGetUserDto,
+  RsGetUsersDto,
   RsLoginUserDto,
   RsRegisterUserDto,
 } from "./dtos";
@@ -15,9 +17,11 @@ import {
   IJwtToken,
   ILoginFactory,
   IRegisterFactory,
+  IUserFactory,
   JWT_TOKEN_SERVICE,
   LOGIN_FACTORY_SERVICE,
   REGISTER_FACTORY_SERVICE,
+  USER_FACTORY_SERVICE,
 } from "./interfaces";
 
 @Injectable()
@@ -36,7 +40,10 @@ export class AuthService {
     private readonly loginFactoryService: ILoginFactory,
 
     @Inject(REGISTER_FACTORY_SERVICE)
-    private readonly registerFactoryService: IRegisterFactory
+    private readonly registerFactoryService: IRegisterFactory,
+
+    @Inject(USER_FACTORY_SERVICE)
+    private readonly userFactoryService: IUserFactory
   ) {}
 
   async login(rqLoginUserDto: RqLoginUserDto): Promise<RsLoginUserDto> {
@@ -123,5 +130,58 @@ export class AuthService {
     }
 
     return authDto;
+  }
+
+  async findOne(id: number): Promise<RsGetUserDto> {
+    let userDto: RsGetUserDto;
+
+    try {
+      const userDB = await this.userRepository.findOneOrFail({
+        where: { id },
+      });
+
+      userDto =
+        userDB !== null
+          ? this.userFactoryService.UserEntitytoDTOGetUserResponse(
+              HttpStatus.OK,
+              "",
+              userDB
+            )
+          : this.userFactoryService.UserEntitytoDTOGetUserResponse(
+              HttpStatus.NOT_FOUND,
+              "El usuario no existe",
+              null
+            );
+    } catch {
+      userDto = this.userFactoryService.UserEntitytoDTOGetUserResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Error al obtener usuario",
+        null
+      );
+    }
+
+    return userDto;
+  }
+
+  async findAll(): Promise<RsGetUsersDto> {
+    let userDto: RsGetUsersDto;
+
+    try {
+      const usersDB = await this.userRepository.find();
+
+      userDto = this.userFactoryService.UserEntitytoDTOGetUsersResponse(
+        HttpStatus.OK,
+        "",
+        usersDB
+      );
+    } catch {
+      userDto = this.userFactoryService.UserEntitytoDTOGetUsersResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Error al obtener usuarios",
+        null
+      );
+    }
+
+    return userDto;
   }
 }
