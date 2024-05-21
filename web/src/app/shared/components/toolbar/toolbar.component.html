@@ -1,20 +1,36 @@
 <div class="toolbar-content">
   <section class="left-side">
-    <button class="button-toolbar button-flat" [routerLink]="link_profile">
+    <button
+      class="button-toolbar button-stroked"
+      [routerLink]="profile_link"
+      routerLinkActive="is-active"
+    >
       Perfil
     </button>
     @if (isAdmin) {
-    <button class="button-toolbar button-stroked" routerLink="users">
+    <button
+      class="button-toolbar button-stroked"
+      routerLink="users"
+      routerLinkActive="is-active"
+    >
       Usuarios
     </button>
     }
 
-    <button class="button-toolbar button-stroked" routerLink="activities">
+    <button
+      class="button-toolbar button-stroked"
+      routerLink="activities"
+      routerLinkActive="is-active"
+    >
       Actividades
     </button>
 
     @if (isAdmin) {
-    <button class="button-toolbar button-stroked" routerLink="audits">
+    <button
+      class="button-toolbar button-stroked"
+      routerLink="audits"
+      routerLinkActive="is-active"
+    >
       Auditoria
     </button>
     }

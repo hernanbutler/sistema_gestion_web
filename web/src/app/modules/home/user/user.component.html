@@ -9,15 +9,15 @@
           <app-select
             label="Estado"
             name="estado"
-            [formControl]="estado"
+            [control]="estado"
             [options]="estadoOption"
-            (value)="estado?.setValue($event.ID)"
+            (value)="estado?.setValue($event.name)"
           ></app-select>
 
           <app-select
             label="Roles"
             name="rol"
-            [formControl]="rol"
+            [control]="rol"
             [options]="rolOption"
             (value)="rol?.setValue($event.name)"
           ></app-select>

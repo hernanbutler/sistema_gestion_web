@@ -5,6 +5,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RsRegisterUser } from '@shared/models';
 import { AuthService } from '@shared/services/auth.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
+import { UserService } from '@shared/services/user.service';
 
 @Component({
   selector: 'app-form-create-user',
@@ -13,7 +14,7 @@ import { SnackbarService } from '@shared/services/snackbar.service';
 })
 export class FormCreateUserComponent {
   constructor(
-    private _auth: AuthService,
+    private _user: UserService,
     private _snackbar: SnackbarService,
     private _dialog: DialogRef
   ) {}
@@ -24,21 +25,32 @@ export class FormCreateUserComponent {
     rol: new FormControl('', [Validators.required]),
   });
 
+  rolOption: any[] = [
+    { ID: 0, name: 'Administrador' },
+    { ID: 1, name: 'Ejecutor' },
+  ];
+
   onSubmit(): void {
     if (this.form.valid) {
-      this._auth.register(this.form.value).subscribe({
-        next: (res: RsRegisterUser) => {
-          const statusCode = res.rsGenericHeaderDto.statusCode;
-          if (statusCode == HttpStatusCode.Created) {
-            this._dialog.close();
-          } else {
-            this._snackbar.openSnackBar(res.rsGenericHeaderDto);
-          }
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
+      this._user
+        .register({
+          email: this.email.value,
+          password: this.password.value,
+          rol: this.rol.value.toUpperCase(),
+        })
+        .subscribe({
+          next: (res: RsRegisterUser) => {
+            const statusCode = res.rsGenericHeaderDto.statusCode;
+            if (statusCode == HttpStatusCode.Created) {
+              this._dialog.close();
+            } else {
+              this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
     } else {
       this.form.markAllAsTouched();
     }

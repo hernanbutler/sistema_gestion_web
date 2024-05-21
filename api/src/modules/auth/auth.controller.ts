@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
   UseInterceptors,
@@ -26,20 +27,26 @@ import {
   RsLoginUserDto,
   RsGetUserDto,
   RsGetUsersDto,
+  RqUpdateUserDto,
+  RsUpdateUserDto,
 } from "./dtos";
 import { AuthService } from "./auth.service";
+import { UserService } from "./user.service";
 import { AuthGuard } from "@guards/auth.guard";
 import { RolesGuard } from "@guards/roles.guard";
 import { Roles } from "src/decorators";
 import { Rol } from "./common/enums";
 
 @ApiTags("Autenticacion")
-@Controller("auth")
+@Controller()
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService
+  ) {}
 
-  @Post("login")
+  @Post("auth/login")
   @ApiOperation({ summary: "Login de usuario" })
   @ApiOkResponse({
     type: Promise<RsLoginUserDto>,
@@ -57,7 +64,9 @@ export class AuthController {
     return await this.authService.login(rqLoginUserDto);
   }
 
-  @Post("register")
+  @Post("user/register")
+  @Roles(Rol.ADMINISTRADOR)
+  @UseGuards(AuthGuard, RolesGuard)
   @ApiOperation({ summary: "Registro de usuario" })
   @ApiCreatedResponse({
     type: Promise<RsRegisterUserDto>,
@@ -71,10 +80,10 @@ export class AuthController {
   async register(
     @Body() rqRegisterUserDto: RqRegisterUserDto
   ): Promise<RsRegisterUserDto> {
-    return await this.authService.register(rqRegisterUserDto);
+    return await this.userService.register(rqRegisterUserDto);
   }
 
-  @Get(":id")
+  @Get("user/:id")
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Búsqueda de usuario" })
   @ApiOkResponse({
@@ -87,10 +96,10 @@ export class AuthController {
     description: "Error al obtener usuario",
   })
   async findOne(@Param("id") id: string): Promise<RsGetUserDto> {
-    return await this.authService.findOne(+id);
+    return await this.userService.findOne(+id);
   }
 
-  @Get()
+  @Get("user")
   @Roles(Rol.ADMINISTRADOR)
   @UseGuards(AuthGuard, RolesGuard)
   @ApiOperation({ summary: "Búsqueda de usuarios" })
@@ -101,6 +110,25 @@ export class AuthController {
     description: "Error al obtener usuarios",
   })
   async findAll(): Promise<RsGetUsersDto> {
-    return await this.authService.findAll();
+    return await this.userService.findAll();
+  }
+
+  @Patch("user/:id")
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: "Modificación de usuario" })
+  @ApiOkResponse({
+    type: Promise<RsUpdateUserDto>,
+  })
+  @ApiNotFoundResponse({
+    description: "El usuario no existe",
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Error al obtener usuario",
+  })
+  async update(
+    @Param("id") id: string,
+    @Body() rqUpdateUserDto: RqUpdateUserDto
+  ): Promise<RsUpdateUserDto> {
+    return await this.userService.update(+id, rqUpdateUserDto);
   }
 }

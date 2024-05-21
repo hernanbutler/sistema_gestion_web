@@ -1,7 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { ComponentRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { UserComponent } from '@modules/home/user/user.component';
 
 @Injectable({
   providedIn: 'root',

@@ -26,4 +26,7 @@
       cursor: default;
     }
   }
+  ::ng-deep .ng-select.ng-select-single .ng-select-container {
+    width: 100%;
+  }
 }

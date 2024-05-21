@@ -34,13 +34,13 @@ export class UserComponent implements OnInit, AfterViewInit {
   });
 
   estadoOption: any[] = [
-    { ID: 1, name: 'Activo' },
     { ID: 0, name: 'Inactivo' },
+    { ID: 1, name: 'Activo' },
   ];
 
   rolOption: any[] = [
-    { ID: 1, name: 'EJECUTOR' },
-    { ID: 0, name: 'ADMINISTRADOR' },
+    { ID: 0, name: 'Administrador' },
+    { ID: 1, name: 'Ejecutor' },
   ];
 
   constructor(
@@ -84,13 +84,12 @@ export class UserComponent implements OnInit, AfterViewInit {
   applyFilter() {
     const users = this._data.getUsers;
     const estadoValue = this.estado.value;
-    const rolValue = this.rol.value;
+    const rolValue = this.rol.value.toUpperCase();
 
     const filteredData = users.filter((item: RsUsersData) => {
-      const matchEstado =
-        estadoValue === 0 || estadoValue === 1
-          ? item.estado === estadoValue
-          : true;
+      const matchEstado = estadoValue
+        ? (item.estado === 0 ? 'Inactivo' : 'Activo') === estadoValue
+        : true;
       const matchRol = rolValue ? item.rol === rolValue : true;
 
       return matchEstado && matchRol;

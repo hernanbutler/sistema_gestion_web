@@ -8,6 +8,9 @@ button.button-toolbar {
   padding: 8px 10px;
   font-size: 12px;
   font-weight: 600;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .button-flat {

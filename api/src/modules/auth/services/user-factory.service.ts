@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 
 import { UserEntity } from "../entities";
 import { IUserFactory } from "../interfaces";
-import { RsGetUserDto, RsGetUsersDto } from "../dtos";
+import { RsGetUserDto, RsGetUsersDto, RsUpdateUserDto } from "../dtos";
 
 @Injectable()
 export class UserFactoryService implements IUserFactory {
@@ -20,5 +20,12 @@ export class UserFactoryService implements IUserFactory {
     users: UserEntity[]
   ): RsGetUsersDto {
     return new RsGetUsersDto({ statusCode, message }, users);
+  }
+
+  UserEntitytoDTOUpdateUserResponse(
+    statusCode: number,
+    message: string
+  ): RsUpdateUserDto {
+    return new RsUpdateUserDto({ statusCode, message });
   }
 }
