@@ -14,10 +14,12 @@ import {
   matWarningAmber,
 } from '@ng-icons/material-icons/baseline';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { MatTableExporterModule } from 'mat-table-exporter';
 import { MaterialModule } from './material.module';
 
 import { AuthComponent } from '@layout/auth/auth.component';
 import { HomeComponent } from '@layout/home/home.component';
+import { DatepickerComponent } from './components/datepicker/datepicker.component';
 import { FormFieldComponent } from './components/form-field/form-field.component';
 import { SearchComponent } from './components/search/search.component';
 import { SelectComponent } from './components/select/select.component';
@@ -27,9 +29,11 @@ import { FormCreateUserComponent } from './entry-components/form-create-user/for
 import { FormUpdateUserComponent } from './entry-components/form-update-user/form-update-user.component';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { EstadoPipe } from './pipes/estado.pipe';
+import { UserPipe } from './pipes/user.pipe';
 
 const COMPONENTS: any = [
   AuthComponent,
+  DatepickerComponent,
   FormFieldComponent,
   HomeComponent,
   SearchComponent,
@@ -53,10 +57,11 @@ const MODULES: any = [
     matWarningAmber,
   }),
   NgSelectModule,
+  MatTableExporterModule,
   ReactiveFormsModule,
   RouterModule,
 ];
-const PIPES: any = [EstadoPipe];
+const PIPES: any = [EstadoPipe, UserPipe];
 
 @NgModule({
   declarations: [COMPONENTS, PIPES],

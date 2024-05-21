@@ -2,18 +2,19 @@
   <label [for]="name">{{ label }}</label>
   @if (name !== 'password') {
   <input
+    [formControl]="control"
     [type]="type"
     [id]="name"
+    [name]="name"
     [class.has-danger]="control.invalid && (control.dirty || control.touched)"
-    [formControl]="control"
   />
   } @if (name === 'password') {
   <div class="input-group">
     <input
+      [formControl]="control"
       [type]="type"
       id="name"
       [class.has-danger]="control.invalid && (control.dirty || control.touched)"
-      [formControl]="control"
     />
     <ng-icon
       [name]="ngIcon"

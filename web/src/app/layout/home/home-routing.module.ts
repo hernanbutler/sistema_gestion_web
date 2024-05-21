@@ -4,11 +4,15 @@ import { ActivityComponent } from '@modules/home/activity/activity.component';
 import { AuditComponent } from '@modules/home/audit/audit.component';
 import { UserComponent } from '@modules/home/user/user.component';
 import { ProfileComponent } from '@modules/home/profile/profile.component';
+import { ProfileGuard } from '@shared/guards/profile.guard';
+import { SecurityGuard } from '@shared/guards/security.guard';
 
 const routes: Routes = [
   {
     path: 'profile/:id',
     component: ProfileComponent,
+    canActivate: [SecurityGuard],
+    canDeactivate: [ProfileGuard],
   },
   {
     path: 'users',

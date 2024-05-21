@@ -21,6 +21,7 @@ import {
 } from "./services";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
+import { UserService } from "./user.service";
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AuthService } from "./auth.service";
   controllers: [AuthController],
   providers: [
     AuthService,
+    UserService,
     DataService,
     {
       provide: ENCRYPT_SERVICE,

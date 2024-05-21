@@ -5,6 +5,6 @@ export interface RsUser {
   rsUserDataDto: RsUserData;
 }
 
-interface RsUserData {
+export interface RsUserData {
   token: string;
 }

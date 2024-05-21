@@ -1,0 +1,11 @@
+<div class="datepicker-content">
+  <label [for]="name">{{ label }}</label>
+  <div class="group-input">
+    <input [formControl]="control" [id]="name" [matDatepicker]="datepicker" />
+    <mat-datepicker-toggle
+      matIconSuffix
+      [for]="datepicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #datepicker></mat-datepicker>
+  </div>
+</div>

@@ -20,12 +20,13 @@
       ></app-form-field>
 
       <!-- FIELD ROL -->
-      <app-form-field
-        [control]="rol"
-        name="rol"
+      <app-select
         label="Rol"
-        type="text"
-      ></app-form-field>
+        name="rol"
+        [control]="rol"
+        [options]="rolOption"
+        (value)="rol?.setValue($event.name)"
+      ></app-select>
     </div>
   </form>
 
