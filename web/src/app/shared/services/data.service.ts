@@ -40,4 +40,8 @@ export class DataService {
   get getAudits() {
     return this.audits;
   }
+
+  get isProfileCompleted(): boolean {
+    return this.user.nombres && this.user.apellidos;
+  }
 }

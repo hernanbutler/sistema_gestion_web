@@ -1,9 +1,15 @@
 <div class="profile-content">
+  @if(currentUser && !isProfiledCompleted) {
+  <div class="banner-profile">
+    <label>Completa la información de tu perfil para poder continuar.</label>
+    <span (click)="updateUser()">Editar perfil</span>
+  </div>
+  }
   <mat-card>
     <section class="avatar">
       <img src="assets/images/avatar-default.png" alt="" />
       @if(currentUser) {
-      <label for="" (click)="updateUser()">Editar perfil</label>
+      <label (click)="updateUser()">Editar perfil</label>
       }
     </section>
     <section class="user-profile">
@@ -35,28 +41,31 @@
         <!-- Estado -->
         <div class="form-field">
           <label for="">Estado:</label>
+          @if (!isAdmin) {
+          <input type="text" name="estado" [ngModel]="user.estado | estado" />
+          } @else {
           <ng-select
             [ngModel]="user.estado | estado"
             (ngModelChange)="user.estado = $event; updateEstado()"
             [searchable]="false"
             [clearable]="false"
-            [disabled]="!isAdmin"
             name="estado"
           >
             <ng-option *ngFor="let item of estadoOption" [value]="item.ID">
-              {{ item.name }}</ng-option
-            >
+              {{ item.name }}
+            </ng-option>
           </ng-select>
+          }
         </div>
       </form>
     </section>
 
-    <a
-      >Ir a
+    <a>
+      Ir a
       <span (click)="goActivity()">{{
         currentUser ? "Mis actividades" : "actividades del usuario"
-      }}</span></a
-    >
+      }}</span>
+    </a>
     <section class="logout">
       <button class="button-toolbar button-flat" (click)="logout()">
         Cerrar sesión

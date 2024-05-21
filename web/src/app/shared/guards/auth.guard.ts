@@ -1,17 +1,18 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { AuthService } from '@shared/services/auth.service';
 import { DataService } from '@shared/services/data.service';
+import { Observable } from 'rxjs';
 
-export const authGuard: CanActivateFn = async () => {
-  const token = sessionStorage.getItem('token');
-  const router = inject(Router);
-  const user = inject(DataService);
-
-  if (token) {
-    user.setUser = new JwtHelperService().decodeToken(token).payload;
-    return true;
-  } else {
-    return router.createUrlTree(['/auth/login']);
-  }
+export const AuthGuard: CanActivateFn = ():
+  | Observable<boolean | UrlTree>
+  | Promise<boolean | UrlTree>
+  | boolean
+  | UrlTree => {
+  const token = inject(AuthService).authenticated();
+  inject(DataService).setUser = new JwtHelperService().decodeToken(
+    token
+  ).payload;
+  return token ? true : inject(Router).createUrlTree(['/auth/login']);
 };
