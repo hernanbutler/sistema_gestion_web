@@ -1,6 +1,9 @@
 <div class="form-field-content">
   <label [for]="name">{{ label }}</label>
-  @if (name !== 'password') {
+
+  @if (type === 'textarea') {
+  <textarea [formControl]="control"></textarea>
+  } @else if (name !== 'password') {
   <input
     [formControl]="control"
     [type]="type"
@@ -8,7 +11,7 @@
     [name]="name"
     [class.has-danger]="control.invalid && (control.dirty || control.touched)"
   />
-  } @if (name === 'password') {
+  } @else {
   <div class="input-group">
     <input
       [formControl]="control"
@@ -23,7 +26,8 @@
       (click)="onClickToggle()"
     ></ng-icon>
   </div>
-  } @if (control.invalid && (control.dirty || control.touched)) {
+  } @if (control.invalid && (control.dirty || control.touched) && type !==
+  'textarea') {
   <small>
     <ng-icon name="matWarningAmber" size="12px"></ng-icon>
 

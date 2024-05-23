@@ -8,8 +8,7 @@ export class UserPipe implements PipeTransform {
   constructor(private _data: DataService) {}
   transform(value: number): any {
     const users = this._data.getUsers;
-    users.find((item: any) => {
-      return item.id == value ? item.nombres + ' ' + item.apellidos : '';
-    });
+    const user = users.find((item: any) => item.id === value);
+    return user ? `${user.nombres} ${user.apellidos}` : '';
   }
 }

@@ -7,6 +7,8 @@ import { withInterceptors, provideHttpClient } from '@angular/common/http';
 import { NgIconsModule } from '@ng-icons/core';
 import {
   matClose,
+  matDelete,
+  matEdit,
   matKey,
   matKeyOff,
   matSearch,
@@ -25,6 +27,7 @@ import { SearchComponent } from './components/search/search.component';
 import { SelectComponent } from './components/select/select.component';
 import { SnackBarComponent } from './components/snackbar/snackbar.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { FormCreateActivityComponent } from './entry-components/form-create-activity/form-create-activity.component';
 import { FormCreateUserComponent } from './entry-components/form-create-user/form-create-user.component';
 import { FormUpdateUserComponent } from './entry-components/form-update-user/form-update-user.component';
 import { authInterceptor } from './interceptors/auth.interceptor';
@@ -40,6 +43,7 @@ const COMPONENTS: any = [
   SelectComponent,
   SnackBarComponent,
   ToolbarComponent,
+  FormCreateActivityComponent,
   FormCreateUserComponent,
   FormUpdateUserComponent,
 ];
@@ -50,6 +54,8 @@ const MODULES: any = [
   MaterialModule,
   NgIconsModule.withIcons({
     matClose,
+    matDelete,
+    matEdit,
     matKey,
     matKeyOff,
     matSearch,

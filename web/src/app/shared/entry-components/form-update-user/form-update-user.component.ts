@@ -25,7 +25,7 @@ export class FormUpdateUserComponent {
   });
 
   onSubmit(): void {
-    this._user.updateUser(this.form.value).subscribe({
+    this._user.updateUser(this._data.getUser.id, this.form.value).subscribe({
       next: (res: any) => {
         const statusCode = res.rsGenericHeaderDto.statusCode;
         if (statusCode == HttpStatusCode.Ok) {
