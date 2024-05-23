@@ -1,0 +1,43 @@
+.activity-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  background-color: #f5f5f5;
+  height: calc(100dvh - 90px);
+  section.form-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 16px;
+    .left-side {
+      form {
+        gap: 20px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  }
+  section.activity-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  section.table {
+    .link-profile {
+      color: #047dfc;
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+    .group-action {
+      display: flex;
+      column-gap: 5px;
+      ng-icon {
+        cursor: pointer;
+      }
+    }
+  }
+}

@@ -79,7 +79,7 @@ export class ProfileComponent {
   }
 
   updateEstado() {
-    this._user.updateUser({ estado: this.user.estado }).subscribe({
+    this._user.updateUser(this.userId, { estado: this.user.estado }).subscribe({
       next: (res: any) => {
         const statusCode = res.rsGenericHeaderDto.statusCode;
         if (statusCode == HttpStatusCode.Ok) {

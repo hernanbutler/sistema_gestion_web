@@ -3,6 +3,21 @@
   flex-direction: column;
   row-gap: 5px;
 
+  textarea {
+    overflow: auto;
+    height: 80px;
+    width: 300px;
+    resize: none;
+    padding: 5px;
+    border: 1px solid rgb(205 205 205);
+    border-radius: 2px;
+    color: rgb(26 27 31 / 80%);
+    font-size: 12px;
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
   input {
     min-height: 26px;
     width: 300px;

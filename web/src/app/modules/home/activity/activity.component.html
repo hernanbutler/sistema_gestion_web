@@ -1,0 +1,169 @@
+<div class="activity-content">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Filtro de actividades</mat-card-title>
+    </mat-card-header>
+    <section class="form-filter">
+      <div class="left-side">
+        <form [formGroup]="form">
+          <!-- FECHA DESDE -->
+          <app-datepicker
+            label="Fecha desde"
+            name="fechaDesde"
+            [control]="fechaDesde"
+          ></app-datepicker>
+
+          <!-- FECHA HASTA -->
+          <app-datepicker
+            label="Fecha hasta"
+            name="fechaHasta"
+            [control]="fechaHasta"
+          ></app-datepicker>
+
+          <!-- USUARIO ORIGINAL -->
+          <app-select
+            label="Usuario Original"
+            name="usuarioOriginal"
+            [control]="usuarioOriginal"
+            [options]="usuarioOriginalOption"
+            (value)="usuarioOriginal?.setValue($event)"
+          ></app-select>
+
+          <!-- PRIORIDAD -->
+          <app-select
+            label="Prioridad"
+            name="prioridad"
+            [control]="prioridad"
+            [options]="prioridadOption"
+            (value)="prioridad?.setValue($event.name)"
+          ></app-select>
+
+          <!-- USUARIO ACTUAL -->
+          <app-select
+            label="Usuario actual"
+            name="usuarioActual"
+            [control]="usuarioActual"
+            [options]="usuarioActualOption"
+            (value)="usuarioActual?.setValue($event)"
+          ></app-select>
+
+          <!-- ESTADO -->
+          <app-select
+            label="Estado"
+            name="estado"
+            [control]="estado"
+            [options]="estadoOption"
+            (value)="estado?.setValue($event.name)"
+          ></app-select>
+        </form>
+      </div>
+      <div class="right-side">
+        <button class="button-toolbar button-flat" (click)="applyFilter()">
+          Filtrar
+        </button>
+      </div>
+    </section>
+  </mat-card>
+
+  <section class="activity-action">
+    <div class="left-side">
+      <app-search (propagar)="applySearch($event)"></app-search>
+    </div>
+    <div class="right-side">
+      <button class="button-toolbar button-flat" (click)="createActivity()">
+        Crear Actividad
+      </button>
+    </div>
+  </section>
+
+  <section class="table">
+    <mat-card>
+      <table mat-table [dataSource]="dataSource">
+        <!-- Actividad Column -->
+        <ng-container matColumnDef="actividad">
+          <th mat-header-cell *matHeaderCellDef>Actividad</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.id }}
+          </td>
+        </ng-container>
+
+        <!-- Descripcion Column -->
+        <ng-container matColumnDef="descripcion">
+          <th mat-header-cell *matHeaderCellDef>Descripción</th>
+          <td mat-cell *matCellDef="let element">{{ element.descripcion }}</td>
+        </ng-container>
+
+        <!-- Prioridad Column -->
+        <ng-container matColumnDef="prioridad">
+          <th mat-header-cell *matHeaderCellDef>Prioridad</th>
+          <td mat-cell *matCellDef="let element">{{ element.prioridad }}</td>
+        </ng-container>
+
+        <!-- Fecha modificacion Column -->
+        <ng-container matColumnDef="fechaModificacion">
+          <th mat-header-cell *matHeaderCellDef>Fecha modificación</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.fechaModificacion | date : "dd/MM/yyyy hh:mm a" }}
+          </td>
+        </ng-container>
+
+        <!-- Estado Column -->
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let element">{{ element.estado }}</td>
+        </ng-container>
+
+        <!-- Usuario Original Column -->
+        <ng-container matColumnDef="usuarioOriginal">
+          <th mat-header-cell *matHeaderCellDef>Usuario Original</th>
+          <td mat-cell *matCellDef="let element">
+            <span
+              class="link-profile"
+              [routerLink]="'/home/profile/' + element.usuarioOriginal.id"
+              >{{ element.usuarioOriginal.nombres }}
+              {{ element.usuarioOriginal.apellidos }}</span
+            >
+          </td>
+        </ng-container>
+
+        <!-- Usuario Actual Column -->
+        <ng-container matColumnDef="usuarioActual">
+          <th mat-header-cell *matHeaderCellDef>Usuario Actual</th>
+          <td mat-cell *matCellDef="let element">
+            <span
+              class="link-profile"
+              [routerLink]="'/home/profile/' + element.usuarioActual.id"
+              >{{ element.usuarioActual.nombres }}
+              {{ element.usuarioActual.apellidos }}</span
+            >
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <div class="group-action">
+              <ng-icon
+                name="matEdit"
+                size="20px"
+                (click)="onEdit(element)"
+              ></ng-icon>
+              <ng-icon
+                name="matDelete"
+                size="20px"
+                (click)="onRemove(element.id)"
+              ></ng-icon>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons>
+      </mat-paginator>
+    </mat-card>
+  </section>
+</div>

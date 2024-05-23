@@ -1,6 +1,8 @@
 export { RsGenericHeader } from './generic-header.model';
+export { RqActivity } from './rq-activity.model';
 export { RqLoginUser } from './rq-login-user.model';
 export { RqRegisterUser } from './rq-register-user.model';
+export { RsActivities, RsActivitiesData } from './rs-activities.model';
 export { RsAudit, RsAuditData } from './rs-audit.model';
 export { RsAudits, RsAuditsData } from './rs-audits.model';
 export { RsLoginUser } from './rs-login-user.model';

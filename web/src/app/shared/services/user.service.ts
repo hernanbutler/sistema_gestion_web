@@ -27,8 +27,7 @@ export class UserService {
     return this._http.get('/v1/api/user');
   }
 
-  updateUser(body: any): Observable<any> {
-    const id = this._data.getUser.id;
+  updateUser(id: number, body: any): Observable<any> {
     return this._http.path(`/v1/api/user/${id}`, body);
   }
 }
