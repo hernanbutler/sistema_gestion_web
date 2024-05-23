@@ -7,3 +7,5 @@ export { RsLoginUser } from './rs-login-user.model';
 export { RsRegisterUser } from './rs-register-user.model';
 export { RsUser, RsUserData } from './rs-user.model';
 export { RsUsers, RsUsersData } from './rs-users.model';
+export { RsActivity, RsActivityData } from './rs-activity.model';
+export { RsActivities, RsActivitiesData } from './rs-activities.model'

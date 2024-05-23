@@ -1,39 +1,174 @@
-<div>
-    <button mat-flat-button color="accent">CREAR ACTIVIDAD</button>
-    <button class="button-toolbar button-stroked" routerLink="audits">
-        CREAR ACTIVIDAD
-    </button>
+<div class="activity-content">
+    <div>
+        <button mat-flat-button color="accent">CREAR ACTIVIDAD</button>
+        <button class="button-toolbar button-stroked" routerLink="audits">
+            CREAR ACTIVIDAD
+        </button>
+    </div>
+
+    <mat-card>
+        <mat-card-header>
+          <mat-card-title>Filtro de auditoria</mat-card-title>
+        </mat-card-header>
+        <section class="form-filter">
+          <div class="left-side">
+            <form [formGroup]="form">
+              <!-- FECHA DESDE -->
+              <!-- <app-datepicker
+                label="Fecha desde"
+                name="fechaDesde"
+                [control]="fechaDesde"
+              ></app-datepicker> -->
+    
+              <!-- FECHA HASTA -->
+              <!-- <app-datepicker
+                label="Fecha hasta"
+                name="fechaHasta"
+                [control]="fechaHasta"
+              ></app-datepicker> -->
+    
+              <!-- USUARIO ORIGINAL -->
+              <app-select
+                label="Usuario Original"
+                name="usuarioOriginal"
+                [control]="usuarioOriginal"
+                [options]="usersOption"
+                (value)="usuarioOriginal?.setValue($event.ID)"
+              ></app-select>
+    
+              <!-- PRIORIDAD -->
+              <app-select
+                label="Prioridad"
+                name="prioridad"
+                [control]="prioridad"
+                [options]="prioridadOption"
+                (value)="prioridad?.setValue($event.name)"
+              ></app-select>
+    
+              <!-- USUARIO ACTUAL -->
+              <app-select
+                label="Usuario actual"
+                name="usuarioActual"
+                [control]="usuarioActual"
+                [options]="usersOption"
+                (value)="usuarioActual?.setValue($event.ID)"
+              ></app-select>
+    
+              <!-- ESTADO -->
+              <app-select
+                label="Estado"
+                name="estado"
+                [control]="estado"
+                [options]="estadoOption"
+                (value)="estado?.setValue($event.name)"
+              ></app-select>
+    
+              <!-- OPERACION -->
+              <app-select
+                label="Operación"
+                name="operacion"
+                [control]="operacion"
+                [options]="operacionOption"
+                (value)="operacion?.setValue($event.name)"
+              ></app-select>
+            </form>
+          </div>
+          <div class="right-side">
+            <button class="button-toolbar button-flat" (click)="applyFilter()">
+              Filtrar
+            </button>
+          </div>
+        </section>
+      </mat-card>
+    
+      <section class="user-action">
+        <div class="left-side">
+          <app-search (propagar)="applySearch($event)"></app-search>
+        </div>
+        <div class="right-side">
+          <button
+            class="button-toolbar button-flat"
+            (click)="exporter.exportTable('csv')"
+          >
+            Exportar
+          </button>
+        </div>
+      </section>
+
+    <section class="table">
+        <mat-card>
+            <table mat-table matTableExporter [dataSource]="dataSource" #exporter="matTableExporter">
+                <!-- Actividad Column -->
+                <ng-container matColumnDef="actividad">
+                    <th mat-header-cell *matHeaderCellDef>Actividad</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="link-activity" [routerLink]="'/home/activities/' + element.actividad">{{
+                            element.actividad }}</span>
+                    </td>
+                </ng-container>
+
+                <!-- Descripcion Column -->
+                <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef>Descripcion</th>
+                    <td mat-cell *matCellDef="let element">{{ element.descripcion }}</td>
+                </ng-container>
+
+                <!-- Usuario Original Column -->
+                <ng-container matColumnDef="usuarioOriginal">
+                    <th mat-header-cell *matHeaderCellDef>Usuario Original</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="link-activity" [routerLink]="'/home/profile/' + element.usuarioOriginal">{{
+                            element.usuarioOriginal | user }}</span>
+                    </td>
+                </ng-container>
+
+                <!-- Prioridad Column -->
+                <ng-container matColumnDef="prioridad">
+                    <th mat-header-cell *matHeaderCellDef>Prioridad</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.prioridad }}
+                    </td>
+                </ng-container>
+
+                <!-- Usuario Actual Column -->
+                <ng-container matColumnDef="usuarioActual">
+                    <th mat-header-cell *matHeaderCellDef>Usuario Actual</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="link-activity" [routerLink]="'/home/profile/' + element.usuarioActual">{{
+                            element.usuarioActual | user }}</span>
+                    </td>
+                </ng-container>
+
+                <!-- Fecha Modificacion Column -->
+                <ng-container matColumnDef="fechaModificacion">
+                    <th mat-header-cell *matHeaderCellDef>Fecha Modificacion</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.fechaModificacion | date : "dd/MM/yyyy hh:mm a" }}
+                    </td>
+                </ng-container>
+
+                <!-- Estado Column -->
+                <ng-container matColumnDef="estado">
+                    <th mat-header-cell *matHeaderCellDef>Estado</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.estado }}
+                    </td>
+                </ng-container>
+
+                <!-- Operacion Column -->
+                <ng-container matColumnDef="operacion">
+                    <th mat-header-cell *matHeaderCellDef>Operacion</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.operacion }}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons>
+            </mat-paginator>
+        </mat-card>
+    </section>
 </div>
-
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-
-    <!-- Position Column -->
-    <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="nombres">
-        <th mat-header-cell *matHeaderCellDef> USUARIO </th>
-        <td mat-cell *matCellDef="let element"> {{element.nombres}} </td>
-    </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef> ACTIVIDAD </th>
-        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-        <th mat-header-cell *matHeaderCellDef> PRIORIDAD </th>
-        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
