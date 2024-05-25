@@ -1,0 +1,18 @@
+<div class="form-delete-activity-content">
+  <h3>Eliminar actividad</h3>
+
+  <p>¿Desea eliminar la actividad {{ data.id }}?</p>
+
+  <div class="group-buttons">
+    <button
+      class="button-toolbar button-stroked"
+      (click)="onClosed()"
+      mat-dialog-close
+    >
+      Cancelar
+    </button>
+    <button class="button-toolbar button-flat" (click)="onSubmit()">
+      Eliminar
+    </button>
+  </div>
+</div>

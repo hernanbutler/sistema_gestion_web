@@ -1,0 +1,42 @@
+<div class="form-view-activity-content">
+  <h2>Actividad #{{ data.id }}</h2>
+
+  <form [formGroup]="form">
+    <div class="form-field-group">
+      <!-- FIELD DESCRIPCION -->
+      <app-form-field
+        [control]="descripcion"
+        name="descripcion"
+        label="Descripción"
+        type="textarea"
+      ></app-form-field>
+
+      <!-- FIELD USUARIO ACTUAL -->
+      <app-select
+        label="Usuario asignado"
+        name="usuarioActual"
+        [control]="usuarioActual"
+        [options]="usersOption"
+        (value)="usuarioActual?.setValue($event.ID ?? $event)"
+      ></app-select>
+
+      <!-- FIELD PRIORIDAD -->
+      <app-select
+        label="Prioridad"
+        name="prioridad"
+        [control]="prioridad"
+        [options]="prioridadOption"
+        (value)="prioridad?.setValue($event.name)"
+      ></app-select>
+
+      <!-- FIELD ESTADO -->
+      <app-select
+        label="Estado"
+        name="estado"
+        [control]="estado"
+        [options]="estadoOption"
+        (value)="estado?.setValue($event.name)"
+      ></app-select>
+    </div>
+  </form>
+</div>

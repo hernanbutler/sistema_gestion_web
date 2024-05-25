@@ -1,9 +1,11 @@
 import { HttpStatusCode } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { FormCreateActivityComponent } from '@shared/entry-components/form-create-activity/form-create-activity.component';
+import { FormDeleteActivityComponent } from '@shared/entry-components/form-delete-activity/form-delete-activity.component';
+import { FormUpdateActivityComponent } from '@shared/entry-components/form-update-activity/form-update-activity.component';
+import { FormViewActivityComponent } from '@shared/entry-components/form-view-activity/form-view-activity.component';
 import { RsActivitiesData, RsActivities } from '@shared/models';
 import { ActivityService } from '@shared/services/activity.service';
 import { DataService } from '@shared/services/data.service';
@@ -15,9 +17,8 @@ import { SnackbarService } from '@shared/services/snackbar.service';
   templateUrl: './activity.component.html',
   styleUrl: './activity.component.scss',
 })
-export class ActivityComponent implements OnInit, AfterViewInit {
+export class ActivityComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<RsActivitiesData>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns: string[] = [
     'actividad',
     'descripcion',
@@ -51,6 +52,7 @@ export class ActivityComponent implements OnInit, AfterViewInit {
     { ID: 1, name: 'FINALIZADO' },
     { ID: 2, name: 'ELIMINADO' },
   ];
+  isAdmin: boolean;
   usuarioOriginalOption: any[] = [];
   usuarioActualOption: any[] = [];
 
@@ -59,14 +61,12 @@ export class ActivityComponent implements OnInit, AfterViewInit {
     private _activity: ActivityService,
     private _dialog: DialogService,
     private _snackbar: SnackbarService
-  ) {}
+  ) {
+    this.isAdmin = this._data.getUser.rol === 'ADMINISTRADOR';
+  }
 
   ngOnInit(): void {
     this.getActivities();
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
   }
 
   private getActivities() {
@@ -119,7 +119,7 @@ export class ActivityComponent implements OnInit, AfterViewInit {
         : true;
 
       const matchUsuarioActual = usuarioActualValue
-        ? item.usuarioActual.id === usuarioActualValue
+        ? item.usuarioActual.id == usuarioActualValue
         : true;
 
       const matchEstado = estadoValue ? item.estado === estadoValue : true;
@@ -147,22 +147,41 @@ export class ActivityComponent implements OnInit, AfterViewInit {
       });
   }
 
-  onEdit(activity: any) {
-    console.log(activity);
+  onView(activity: any): void {
+    this._dialog.openDialog(FormViewActivityComponent, activity);
   }
 
-  onRemove(activity_id: number) {
-    console.log(activity_id);
+  onEdit(activity: any): void {
+    this._dialog
+      .openDialog(FormUpdateActivityComponent, activity)
+      .afterClosed()
+      .subscribe(() => {
+        this.getActivities();
+      });
+  }
+
+  onRemove(activity_id: number): void {
+    this._dialog
+      .openDialog(FormDeleteActivityComponent, { id: activity_id })
+      .afterClosed()
+      .subscribe(() => {
+        this.getActivities();
+      });
   }
 
   getUsuarioOriginalOption(): any {
+    this.usuarioOriginalOption = [];
     const uniqueIDs = new Set();
 
     this._data.getActivities?.forEach((item: any) => {
       const usuarioOriginal = {
         ID: item.usuarioOriginal.id,
         name:
-          item.usuarioOriginal.nombres + ' ' + item.usuarioOriginal.apellidos,
+          item.usuarioOriginal.nombres && item.usuarioOriginal.apellidos
+            ? item.usuarioOriginal.nombres +
+              ' ' +
+              item.usuarioOriginal.apellidos
+            : item.usuarioOriginal.email,
       };
 
       if (!uniqueIDs.has(usuarioOriginal.ID)) {
@@ -173,12 +192,16 @@ export class ActivityComponent implements OnInit, AfterViewInit {
   }
 
   getUsuarioActualOption(): any {
+    this.usuarioActualOption = [];
     const uniqueIDs = new Set();
 
     this._data.getActivities?.forEach((item: any) => {
       const usuarioActual = {
         ID: item.usuarioActual.id,
-        name: item.usuarioActual.nombres + ' ' + item.usuarioActual.apellidos,
+        name:
+          item.usuarioActual.nombres && item.usuarioActual.apellidos
+            ? item.usuarioActual.nombres + ' ' + item.usuarioActual.apellidos
+            : item.usuarioActual.email,
       };
 
       if (!uniqueIDs.has(usuarioActual.ID)) {
