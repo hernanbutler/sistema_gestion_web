@@ -11,6 +11,9 @@ button.button-toolbar {
   &:hover {
     opacity: 0.8;
   }
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 .button-flat {
@@ -39,4 +42,13 @@ button.button-toolbar {
 
 .mat-mdc-row {
   --mat-table-row-item-container-height: 44px;
+}
+
+.mdc-data-table__cell {
+  box-sizing: border-box;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  max-width: 100px;
+  white-space: nowrap;
 }

@@ -36,6 +36,12 @@
       <app-search (propagar)="applySearch($event)"></app-search>
     </div>
     <div class="right-side">
+      <button
+        class="button-toolbar button-flat"
+        (click)="exporter.exportTable('csv')"
+      >
+        Exportar
+      </button>
       <button class="button-toolbar button-flat" (click)="createUser()">
         Crear Usuario
       </button>
@@ -44,7 +50,12 @@
 
   <section class="table">
     <mat-card>
-      <table mat-table [dataSource]="dataSource">
+      <table
+        mat-table
+        matTableExporter
+        [dataSource]="dataSource"
+        #exporter="matTableExporter"
+      >
         <!-- Email Column -->
         <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef>Email</th>
@@ -86,9 +97,6 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-
-      <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons>
-      </mat-paginator>
     </mat-card>
   </section>
 </div>
