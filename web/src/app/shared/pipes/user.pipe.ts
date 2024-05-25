@@ -9,6 +9,8 @@ export class UserPipe implements PipeTransform {
   transform(value: number): any {
     const users = this._data.getUsers;
     const user = users.find((item: any) => item.id === value);
-    return user ? `${user.nombres} ${user.apellidos}` : '';
+    return user && user.nombres && user.apellidos
+      ? `${user.nombres} ${user.apellidos}`
+      : user.email;
   }
 }

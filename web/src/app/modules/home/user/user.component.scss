@@ -4,6 +4,7 @@
   flex-direction: column;
   row-gap: 20px;
   background-color: #f5f5f5;
+  min-height: calc(100dvh - 90px);
   section.form-filter {
     display: flex;
     justify-content: space-between;
@@ -20,6 +21,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .right-side {
+      display: flex;
+      column-gap: 10px;
+    }
   }
 
   section.table {

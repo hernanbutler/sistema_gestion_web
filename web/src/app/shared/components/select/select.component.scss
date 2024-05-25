@@ -16,3 +16,13 @@ span.ng-option-label {
   height: 36px;
   width: 200px;
 }
+
+::ng-deep ng-select span {
+  box-sizing: border-box;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  font-size: 14px;
+}

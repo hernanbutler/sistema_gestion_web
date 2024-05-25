@@ -1,0 +1,18 @@
+<div class="logout-content">
+  <h3>Cerrar sesión</h3>
+
+  <p>¿Desea cerrar sesión?</p>
+
+  <div class="group-buttons">
+    <button
+      class="button-toolbar button-stroked"
+      (click)="onClosed()"
+      mat-dialog-close
+    >
+      Cancelar
+    </button>
+    <button class="button-toolbar button-flat" (click)="onSubmit()">
+      Cerrar sesión
+    </button>
+  </div>
+</div>

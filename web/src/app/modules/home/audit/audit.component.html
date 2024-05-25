@@ -20,13 +20,22 @@
             [control]="fechaHasta"
           ></app-datepicker>
 
+          <!-- ACTIVIDAD -->
+          <app-select
+            label="Actividad"
+            name="actividad"
+            [control]="actividad"
+            [options]="actividadOption"
+            (value)="actividad?.setValue($event.ID)"
+          ></app-select>
+
           <!-- USUARIO ORIGINAL -->
           <app-select
             label="Usuario Original"
             name="usuarioOriginal"
             [control]="usuarioOriginal"
             [options]="usersOption"
-            (value)="usuarioOriginal?.setValue($event.ID)"
+            (value)="usuarioOriginal?.setValue($event)"
           ></app-select>
 
           <!-- PRIORIDAD -->
@@ -44,7 +53,7 @@
             name="usuarioActual"
             [control]="usuarioActual"
             [options]="usersOption"
-            (value)="usuarioActual?.setValue($event.ID)"
+            (value)="usuarioActual?.setValue($event)"
           ></app-select>
 
           <!-- ESTADO -->
@@ -100,11 +109,7 @@
         <ng-container matColumnDef="actividad">
           <th mat-header-cell *matHeaderCellDef>Actividad</th>
           <td mat-cell *matCellDef="let element">
-            <span
-              class="link-activity"
-              [routerLink]="'/home/activities/' + element.actividad"
-              >{{ element.actividad }}</span
-            >
+            {{ element.actividad }}
           </td>
         </ng-container>
 
@@ -164,7 +169,7 @@
 
         <!-- Operacion Column -->
         <ng-container matColumnDef="operacion">
-          <th mat-header-cell *matHeaderCellDef>Operacion</th>
+          <th mat-header-cell *matHeaderCellDef>Operación</th>
           <td mat-cell *matCellDef="let element">
             {{ element.operacion }}
           </td>
@@ -173,9 +178,6 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-
-      <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons>
-      </mat-paginator>
     </mat-card>
   </section>
 </div>

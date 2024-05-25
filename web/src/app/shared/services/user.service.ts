@@ -28,6 +28,6 @@ export class UserService {
   }
 
   updateUser(id: number, body: any): Observable<any> {
-    return this._http.path(`/v1/api/user/${id}`, body);
+    return this._http.patch(`/v1/api/user/${id}`, body);
   }
 }
