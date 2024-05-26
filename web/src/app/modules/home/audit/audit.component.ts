@@ -1,9 +1,7 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Estado, Operacion, Prioridad } from '@shared/enums';
 import { RsAudits, RsAuditsData } from '@shared/models';
 import { AuditService } from '@shared/services/audit.service';
 import { DataService } from '@shared/services/data.service';
@@ -17,7 +15,6 @@ import { SnackbarService } from '@shared/services/snackbar.service';
 })
 export class AuditComponent {
   @ViewChild(MatTable) table: MatTable<RsAuditsData>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns: string[] = [
     'actividad',
     'descripcion',
@@ -59,6 +56,8 @@ export class AuditComponent {
     { ID: 2, name: 'ELIMINACION' },
   ];
 
+  usersOption: any[] = [];
+
   constructor(
     public _data: DataService,
     private _audit: AuditService,
@@ -70,10 +69,6 @@ export class AuditComponent {
     this.getAudits();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
   private getAudits() {
     this._audit.audits().subscribe({
       next: (res: RsAudits) => {
@@ -83,6 +78,7 @@ export class AuditComponent {
           this.dataSource = new MatTableDataSource<RsAuditsData>(
             this._data.getAudits
           );
+          this.getUsersOption();
         } else {
           this._snackbar.openSnackBar(res.rsGenericHeaderDto);
         }
@@ -114,16 +110,16 @@ export class AuditComponent {
         ? new Date(item.fechaModificacion) <= new Date(this.fechaHasta.value)
         : true;
 
-      const matchUsuarioOriginal = usuarioOriginalValue
-        ? item.usuarioOriginal === usuarioOriginalValue
+      const matchUsuarioOriginal = usuarioOriginalValue.ID
+        ? item.usuarioOriginal === usuarioOriginalValue.ID
         : true;
 
       const matchPrioridad = prioridadValue
         ? item.prioridad === prioridadValue
         : true;
 
-      const matchUsuarioActual = usuarioActualValue
-        ? item.usuarioActual === usuarioActualValue
+      const matchUsuarioActual = usuarioActualValue.ID
+        ? item.usuarioActual === usuarioActualValue.ID
         : true;
 
       const matchEstado = estadoValue ? item.estado === estadoValue : true;
@@ -147,15 +143,22 @@ export class AuditComponent {
     this.table.renderRows();
   }
 
-  get usersOption(): any {
-    const usuarioOriginal = new Set();
+  getUsersOption(): void {
+    this.usersOption = [];
+    const users = this._data.getUsers;
+
     this._data.getAudits?.map((item: any) => {
-      usuarioOriginal.add({
-        ID: item.id,
-        name: item.nombres + ' ' + item.apellidos,
-      });
+      const user = users.find((value: any) => item.id === value.id);
+      if (user) {
+        this.usersOption.push({
+          ID: item.id,
+          name:
+            user.nombres && user.apellidos
+              ? user.nombres + ' ' + user.apellidos
+              : user.email,
+        });
+      }
     });
-    return usuarioOriginal;
   }
 
   get fechaDesde(): any {

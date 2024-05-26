@@ -2,6 +2,7 @@ import { HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormUpdateUserComponent } from '@shared/entry-components/form-update-user/form-update-user.component';
+import { LogoutComponent } from '@shared/entry-components/logout/logout.component';
 import { RsUser } from '@shared/models';
 import { DataService } from '@shared/services/data.service';
 import { DialogService } from '@shared/services/dialog.service';
@@ -46,11 +47,7 @@ export class ProfileComponent {
   ngOnInit(): void {
     this._activatedRoute.paramMap.subscribe((params) => {
       this.userId = params.get('id');
-      const rol_ejecutor = this._data.getUser.rol == 'EJECUTOR';
       this.currentUser = this.userId == this._data.getUser.id;
-      if (rol_ejecutor && !this.currentUser) {
-        this._router.navigate(['/home/profile/' + this._data.getUser.id]);
-      }
       this.getUser();
     });
   }
@@ -103,11 +100,7 @@ export class ProfileComponent {
       });
   }
 
-  goActivity(): void {
-    this._router.navigate(['/home/activities']);
-  }
-
   logout(): void {
-    this._router.navigate(['/auth/login']);
+    this._dialog.openDialog(LogoutComponent);
   }
 }

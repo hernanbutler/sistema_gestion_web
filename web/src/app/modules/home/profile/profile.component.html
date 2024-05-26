@@ -60,16 +60,12 @@
       </form>
     </section>
 
-    <a>
-      Ir a
-      <span (click)="goActivity()">{{
-        currentUser ? "Mis actividades" : "actividades del usuario"
-      }}</span>
-    </a>
+    @if (currentUser) {
     <section class="logout">
       <button class="button-toolbar button-flat" (click)="logout()">
         Cerrar sesión
       </button>
     </section>
+    }
   </mat-card>
 </div>

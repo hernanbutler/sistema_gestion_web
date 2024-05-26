@@ -8,10 +8,11 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 export class DialogService {
   constructor(private _dialog: MatDialog) {}
 
-  openDialog(component: ComponentType<any>) {
+  openDialog(component: ComponentType<any>, data?: any) {
     const config: MatDialogConfig = {
-      // data,
+      data: data,
     };
+
     return this._dialog.open(component, config);
   }
 }

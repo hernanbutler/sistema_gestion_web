@@ -111,9 +111,15 @@ export class ActivityService {
 
       const activitiesDB =
         user.rol === Rol.EJECUTOR
-          ? await this.activityRepository.query(
-              `SELECT * FROM actividades WHERE usuarioActual = ${user.id} or usuarioOriginal = ${user.id};`
-            )
+          ? await this.activityRepository
+              .createQueryBuilder("actividad")
+              .leftJoinAndSelect("actividad.usuarioActual", "usuarioActual")
+              .leftJoinAndSelect("actividad.usuarioOriginal", "usuarioOriginal")
+              .where(
+                "actividad.usuarioActual = :userId OR actividad.usuarioOriginal = :userId",
+                { userId: user.id }
+              )
+              .getMany()
           : await this.activityRepository.find();
 
       activityDto =

@@ -11,6 +11,7 @@ import {
   matEdit,
   matKey,
   matKeyOff,
+  matRemoveRedEye,
   matSearch,
   matWarning,
   matWarningAmber,
@@ -29,7 +30,9 @@ import { SnackBarComponent } from './components/snackbar/snackbar.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FormCreateActivityComponent } from './entry-components/form-create-activity/form-create-activity.component';
 import { FormCreateUserComponent } from './entry-components/form-create-user/form-create-user.component';
+import { FormUpdateActivityComponent } from './entry-components/form-update-activity/form-update-activity.component';
 import { FormUpdateUserComponent } from './entry-components/form-update-user/form-update-user.component';
+import { FormViewActivityComponent } from './entry-components/form-view-activity/form-view-activity.component';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { EstadoPipe } from './pipes/estado.pipe';
 import { UserPipe } from './pipes/user.pipe';
@@ -45,7 +48,9 @@ const COMPONENTS: any = [
   ToolbarComponent,
   FormCreateActivityComponent,
   FormCreateUserComponent,
+  FormUpdateActivityComponent,
   FormUpdateUserComponent,
+  FormViewActivityComponent,
 ];
 const MODULES: any = [
   CommonModule,
@@ -58,6 +63,7 @@ const MODULES: any = [
     matEdit,
     matKey,
     matKeyOff,
+    matRemoveRedEye,
     matSearch,
     matWarning,
     matWarningAmber,

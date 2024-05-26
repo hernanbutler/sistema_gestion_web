@@ -20,4 +20,12 @@ export class ActivityService {
   activities(): Observable<any> {
     return this._http.get('/v1/api/activity');
   }
+
+  update(id: any, body: any): Observable<any> {
+    return this._http.patch('/v1/api/activity/' + id, body);
+  }
+
+  delete(id: any): Observable<any> {
+    return this._http.delete('/v1/api/activity/' + id);
+  }
 }

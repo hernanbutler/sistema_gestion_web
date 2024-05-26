@@ -1,7 +1,6 @@
 import { HttpStatusCode } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { FormCreateUserComponent } from '@shared/entry-components/form-create-user/form-create-user.component';
 import { RsUsers, RsUsersData } from '@shared/models/rs-users.model';
@@ -15,9 +14,8 @@ import { UserService } from '@shared/services/user.service';
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
-export class UserComponent implements OnInit, AfterViewInit {
+export class UserComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<RsUsersData>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns: string[] = [
     'email',
     'nombres',
@@ -52,10 +50,6 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getUsers();
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
   }
 
   private getUsers() {
