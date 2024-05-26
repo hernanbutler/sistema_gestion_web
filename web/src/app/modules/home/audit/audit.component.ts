@@ -5,7 +5,6 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { RsAudits, RsAuditsData } from '@shared/models';
 import { AuditService } from '@shared/services/audit.service';
 import { DataService } from '@shared/services/data.service';
-import { DialogService } from '@shared/services/dialog.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
 
 @Component({
@@ -31,6 +30,7 @@ export class AuditComponent {
   form: FormGroup = new FormGroup({
     fechaDesde: new FormControl(''),
     fechaHasta: new FormControl(''),
+    actividad: new FormControl(''),
     usuarioOriginal: new FormControl(''),
     prioridad: new FormControl(''),
     usuarioActual: new FormControl(''),
@@ -56,12 +56,12 @@ export class AuditComponent {
     { ID: 2, name: 'ELIMINACION' },
   ];
 
+  actividadOption: any[] = [];
   usersOption: any[] = [];
 
   constructor(
     public _data: DataService,
     private _audit: AuditService,
-    private _dialog: DialogService,
     private _snackbar: SnackbarService
   ) {}
 
@@ -78,6 +78,7 @@ export class AuditComponent {
           this.dataSource = new MatTableDataSource<RsAuditsData>(
             this._data.getAudits
           );
+          this.getAuditsOption();
           this.getUsersOption();
         } else {
           this._snackbar.openSnackBar(res.rsGenericHeaderDto);
@@ -95,6 +96,7 @@ export class AuditComponent {
 
   applyFilter() {
     const audits = this._data.getAudits;
+    const actividadValue = this.actividad.value;
     const usuarioOriginalValue = this.usuarioOriginal.value;
     const prioridadValue = this.prioridad.value;
     const usuarioActualValue = this.usuarioActual.value;
@@ -108,6 +110,10 @@ export class AuditComponent {
 
       const matchFechaHasta = this.fechaHasta.value
         ? new Date(item.fechaModificacion) <= new Date(this.fechaHasta.value)
+        : true;
+
+      const matchActividad = actividadValue
+        ? item.actividad === actividadValue
         : true;
 
       const matchUsuarioOriginal = usuarioOriginalValue.ID
@@ -131,6 +137,7 @@ export class AuditComponent {
       return (
         matchFechaDesde &&
         matchFechaHasta &&
+        matchActividad &&
         matchUsuarioOriginal &&
         matchPrioridad &&
         matchUsuarioActual &&
@@ -141,6 +148,18 @@ export class AuditComponent {
 
     this.dataSource.data = filteredData;
     this.table.renderRows();
+  }
+
+  getAuditsOption(): void {
+    this.actividadOption = [];
+    const uniqueIDs = new Set();
+
+    this._data.getAudits?.forEach((item: any) => {
+      if (!uniqueIDs.has(item.actividad)) {
+        uniqueIDs.add(item.actividad);
+        this.actividadOption.push({ ID: item.actividad, name: item.actividad });
+      }
+    });
   }
 
   getUsersOption(): void {
@@ -167,6 +186,10 @@ export class AuditComponent {
 
   get fechaHasta(): any {
     return this.form.get('fechaHasta');
+  }
+
+  get actividad(): any {
+    return this.form.get('actividad');
   }
 
   get usuarioOriginal(): any {

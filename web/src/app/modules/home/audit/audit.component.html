@@ -20,6 +20,15 @@
             [control]="fechaHasta"
           ></app-datepicker>
 
+          <!-- ACTIVIDAD -->
+          <app-select
+            label="Actividad"
+            name="actividad"
+            [control]="actividad"
+            [options]="actividadOption"
+            (value)="actividad?.setValue($event.ID)"
+          ></app-select>
+
           <!-- USUARIO ORIGINAL -->
           <app-select
             label="Usuario Original"

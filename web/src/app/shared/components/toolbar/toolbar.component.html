@@ -35,4 +35,11 @@
     </button>
     }
   </section>
+  <section class="right-side">
+    <span>{{
+      _data.getUser.nombres && _data.getUser.apellidos
+        ? _data.getUser.nombres + " " + _data.getUser.apellidos
+        : _data.getUser.email
+    }}</span>
+  </section>
 </div>
