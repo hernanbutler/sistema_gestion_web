@@ -14,7 +14,10 @@ export class SelectComponent {
   @Output() value: EventEmitter<any> = new EventEmitter<any>();
 
   onChange(event: any): void {
-    console.log();
     this.value.emit(event ?? { ID: '', name: '' });
+  }
+
+  compareFn(item: any, selected: any) {
+    return item.ID === (selected.ID ?? selected);
   }
 }

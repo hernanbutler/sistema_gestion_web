@@ -30,7 +30,10 @@
     </div>
   </form>
 
-  <button type="submit" (click)="onSubmit()" [disabled]="form.invalid">
-    Crear usuario
-  </button>
+  <div class="group-buttons">
+    <button type="submit" (click)="onSubmit()" [disabled]="form.invalid">
+      Crear usuario
+    </button>
+    <button class="button-stroked" mat-dialog-close>Cancelar</button>
+  </div>
 </div>

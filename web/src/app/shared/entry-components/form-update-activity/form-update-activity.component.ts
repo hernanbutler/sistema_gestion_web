@@ -3,10 +3,10 @@ import { HttpStatusCode } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { RsRegisterUser } from '@shared/models';
 import { ActivityService } from '@shared/services/activity.service';
 import { DataService } from '@shared/services/data.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-form-update-activity',
@@ -19,7 +19,8 @@ export class FormUpdateActivityComponent implements OnInit {
     public _data: DataService,
     private _activity: ActivityService,
     private _snackbar: SnackbarService,
-    private _dialog: DialogRef
+    private _dialog: DialogRef,
+    private spinner: NgxSpinnerService
   ) {
     this.isAdmin = this._data.getUser.rol === 'ADMINISTRADOR';
   }
@@ -49,6 +50,7 @@ export class FormUpdateActivityComponent implements OnInit {
   usersOption: any[] = [];
 
   ngOnInit(): void {
+    this.spinner.show();
     this.getUsersOption();
 
     if (!this.isAdmin) {
@@ -56,10 +58,12 @@ export class FormUpdateActivityComponent implements OnInit {
       this.usuarioActual.disable();
       this.prioridad.disable();
     }
+    this.spinner.hide();
   }
 
   onSubmit(): void {
     if (this.form.valid) {
+      this.spinner.show();
       this._activity
         .update(this.data.id, {
           descripcion: this.descripcion.value,
@@ -70,18 +74,14 @@ export class FormUpdateActivityComponent implements OnInit {
           prioridad: this.prioridad.value,
           estado: this.estado.value,
         })
-        .subscribe({
-          next: (res: any) => {
-            const statusCode = res.rsGenericHeaderDto.statusCode;
-            if (statusCode == HttpStatusCode.Ok) {
-              this._dialog.close();
-            } else {
-              this._snackbar.openSnackBar(res.rsGenericHeaderDto);
-            }
-          },
-          error: (err) => {
-            console.log(err);
-          },
+        .subscribe((res: any) => {
+          const statusCode = res.rsGenericHeaderDto.statusCode;
+          if (statusCode == HttpStatusCode.Ok) {
+            this._dialog.close();
+          } else {
+            this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+          }
+          this.spinner.hide();
         });
     } else {
       this.form.markAllAsTouched();

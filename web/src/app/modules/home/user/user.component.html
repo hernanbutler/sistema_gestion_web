@@ -55,10 +55,11 @@
         matTableExporter
         [dataSource]="dataSource"
         #exporter="matTableExporter"
+        matSort
       >
         <!-- Email Column -->
         <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
           <td mat-cell *matCellDef="let element">
             <span
               class="link-profile"
@@ -70,19 +71,19 @@
 
         <!-- Nombre Column -->
         <ng-container matColumnDef="nombres">
-          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
           <td mat-cell *matCellDef="let element">{{ element.nombres }}</td>
         </ng-container>
 
         <!-- Apellido Column -->
         <ng-container matColumnDef="apellidos">
-          <th mat-header-cell *matHeaderCellDef>Apellido</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Apellido</th>
           <td mat-cell *matCellDef="let element">{{ element.apellidos }}</td>
         </ng-container>
 
         <!-- Estado Column -->
         <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
           <td mat-cell *matCellDef="let element">
             {{ element.estado | estado }}
           </td>
@@ -90,13 +91,15 @@
 
         <!-- Rol Column -->
         <ng-container matColumnDef="rol">
-          <th mat-header-cell *matHeaderCellDef>Rol</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Rol</th>
           <td mat-cell *matCellDef="let element">{{ element.rol }}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
     </mat-card>
   </section>
 </div>

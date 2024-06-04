@@ -4,6 +4,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivityService } from '@shared/services/activity.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-form-delete-activity',
@@ -15,22 +16,20 @@ export class FormDeleteActivityComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _activity: ActivityService,
     private _snackbar: SnackbarService,
-    private _dialog: DialogRef
+    private _dialog: DialogRef,
+    private spinner: NgxSpinnerService
   ) {}
 
   onSubmit(): void {
-    this._activity.delete(this.data.id).subscribe({
-      next: (res: any) => {
-        const statusCode = res.rsGenericHeaderDto.statusCode;
-        if (statusCode == HttpStatusCode.Ok) {
-          this.onClosed();
-        } else {
-          this._snackbar.openSnackBar(res.rsGenericHeaderDto);
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+    this.spinner.show();
+    this._activity.delete(this.data.id).subscribe((res: any) => {
+      const statusCode = res.rsGenericHeaderDto.statusCode;
+      if (statusCode == HttpStatusCode.Ok) {
+        this.onClosed();
+      } else {
+        this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+      }
+      this.spinner.hide();
     });
   }
 

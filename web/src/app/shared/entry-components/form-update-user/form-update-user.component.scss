@@ -10,20 +10,25 @@
     row-gap: 20px;
   }
 
-  button {
-    background-color: #047dfc;
-    border: none;
-    width: 100%;
-    color: #fff;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 3px;
-    font-size: 14px;
-    font-weight: 600;
-    &:disabled {
-      background-color: rgba(26, 27, 31, 0.12);
-      color: rgba(26, 27, 31, 0.38);
-      cursor: default;
+  .group-buttons {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    button {
+      background-color: #047dfc;
+      border: none;
+      width: 100%;
+      color: #fff;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 3px;
+      font-size: 14px;
+      font-weight: 600;
+      &:disabled {
+        background-color: rgba(26, 27, 31, 0.12);
+        color: rgba(26, 27, 31, 0.38);
+        cursor: default;
+      }
     }
   }
 }

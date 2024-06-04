@@ -33,9 +33,40 @@
     display: grid;
     justify-items: center;
     row-gap: 10px;
-    img {
-      width: 150px;
+    .group-img {
+      img {
+        width: 150px;
+        border-radius: 50%;
+      }
+      .input-img {
+        display: none;
+      }
+      input[type="file"] {
+        opacity: 0;
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        display: grid;
+        top: 20px;
+        cursor: pointer;
+      }
+      &.image-hovering:hover img {
+        opacity: 0.4;
+      }
+      &:hover {
+        .input-img {
+          position: absolute;
+          transform: translate(27%, -155%);
+          display: grid;
+          justify-items: center;
+          span {
+            width: 100px;
+            text-align: center;
+          }
+        }
+      }
     }
+
     label {
       cursor: pointer;
       font-size: 12px;
