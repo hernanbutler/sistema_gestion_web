@@ -9,6 +9,8 @@ import { ActivityService } from '@shared/services/activity.service';
 import { DataService } from '@shared/services/data.service';
 import { DialogService } from '@shared/services/dialog.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
+import { FormCreateActivityComponent } from '@shared/entry-components/form-create-activity/form-create-activity.component';
+
 
 @Component({
   selector: 'app-activity',
@@ -63,8 +65,10 @@ export class ActivityComponent {
     public _data: DataService,
     private _activity: ActivityService,
     private _dialog: DialogService,
-    private _snackbar: SnackbarService
-  ) {}
+    private _snackbar: SnackbarService,
+  ) { this.isAdmin = this._data.getUser.rol === 'ADMINISTRADOR' }
+
+  isAdmin: boolean;
 
   ngOnInit(): void {
     this.getActivities();
@@ -76,10 +80,10 @@ export class ActivityComponent {
 
   private getActivities() {
     this._activity.activities().subscribe({
-      next: (res: RsActivities) => {
+      next: (res: any) => {
         const statusCode = res.rsGenericHeaderDto.statusCode;
         if (statusCode == HttpStatusCode.Ok) {
-          this._data.setActivities = res.rsGetActivityDataDto;
+          this._data.setActivities = res.rsActivitiesDataDto;
           this.dataSource = new MatTableDataSource<RsActivitiesData>(
             this._data.getActivities
           );
@@ -145,6 +149,15 @@ export class ActivityComponent {
 
     this.dataSource.data = filteredData;
     this.table.renderRows();
+  }
+
+  createActivity(): void {
+    this._dialog
+      .openDialog(FormCreateActivityComponent)
+      .afterClosed()
+      .subscribe(() => {
+        this.getActivities();
+      });
   }
 
   get usersOption(): any {
