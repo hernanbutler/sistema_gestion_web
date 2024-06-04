@@ -1,13 +1,14 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormUpdateUserComponent } from '@shared/entry-components/form-update-user/form-update-user.component';
 import { LogoutComponent } from '@shared/entry-components/logout/logout.component';
-import { RsUser } from '@shared/models';
 import { DataService } from '@shared/services/data.service';
 import { DialogService } from '@shared/services/dialog.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
 import { UserService } from '@shared/services/user.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-profile',
@@ -20,8 +21,10 @@ export class ProfileComponent {
     public _data: DataService,
     private _dialog: DialogService,
     private _snackbar: SnackbarService,
+    private spinner: NgxSpinnerService,
     private _activatedRoute: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    private sanitizer: DomSanitizer
   ) {
     this.isAdmin = this._data.getUser.rol === 'ADMINISTRADOR';
   }
@@ -30,6 +33,7 @@ export class ProfileComponent {
   isAdmin: boolean;
   isProfiledCompleted: boolean = true;
   userId: any;
+  avatar: any = 'assets/images/avatar-default.png';
 
   user = {
     nombre: '',
@@ -53,7 +57,8 @@ export class ProfileComponent {
   }
 
   private getUser() {
-    this._user.user(this.userId).subscribe((res: RsUser) => {
+    this.spinner.show();
+    this._user.user(this.userId).subscribe((res: any) => {
       const statusCode = res.rsGenericHeaderDto.statusCode;
       if (statusCode == HttpStatusCode.Ok) {
         this.setData(res.rsUserDataDto);
@@ -61,10 +66,17 @@ export class ProfileComponent {
           this._data.setUser = res.rsUserDataDto;
           this.isProfiledCompleted = true;
         }
+        if (res.rsUserDataDto.image) {
+          this._user.getImage(res.rsUserDataDto.image).subscribe((res: any) => {
+            let objectURL = URL.createObjectURL(res);
+            this.avatar = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+          });
+        }
       } else {
         this._snackbar.openSnackBar(res.rsGenericHeaderDto);
       }
     });
+    this.spinner.hide();
   }
 
   private setData(data: any): void {
@@ -98,6 +110,20 @@ export class ProfileComponent {
       .subscribe(() => {
         this.getUser();
       });
+  }
+
+  uploadImage(event: any) {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    this._user.upload(this.userId, formData).subscribe(() => {
+      this.getUser();
+    });
+  }
+
+  goActivity(): void {
+    sessionStorage.setItem('activity', this.userId);
+    this._router.navigate(['/home/activities']);
   }
 
   logout(): void {

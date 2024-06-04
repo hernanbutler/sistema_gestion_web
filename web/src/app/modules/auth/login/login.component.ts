@@ -7,6 +7,7 @@ import { RsLoginUser } from '@shared/models';
 import { AuthService } from '@shared/services/auth.service';
 import { DataService } from '@shared/services/data.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ export class LoginComponent {
     private _router: Router,
     private _auth: AuthService,
     private _data: DataService,
-    private _snackbar: SnackbarService
+    private _snackbar: SnackbarService,
+    private spinner: NgxSpinnerService
   ) {}
 
   form: FormGroup = new FormGroup({
@@ -27,6 +29,7 @@ export class LoginComponent {
   });
 
   onSubmit(): void {
+    this.spinner.show();
     if (this.form.valid) {
       this._auth.login(this.form.value).subscribe({
         next: (res: RsLoginUser) => {
@@ -49,6 +52,7 @@ export class LoginComponent {
     } else {
       this.form.markAllAsTouched();
     }
+    this.spinner.hide();
   }
 
   get email(): any {

@@ -22,6 +22,9 @@ import {
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { UserService } from "./user.service";
+import { MulterModule } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
+import { extname } from "path";
 
 @Module({
   imports: [
@@ -34,6 +37,19 @@ import { UserService } from "./user.service";
         },
       }),
       inject: [ConfigService],
+    }),
+    MulterModule.registerAsync({
+      useFactory: () => ({
+        storage: diskStorage({
+          destination: "./uploads",
+          filename: (req, file, callback) => {
+            const id = req.params.id;
+            const fileExtName = extname(file.originalname);
+            const newFilename = `${id}${fileExtName}`;
+            callback(null, newFilename);
+          },
+        }),
+      }),
     }),
     TypeOrmModule.forFeature([UserEntity]),
   ],

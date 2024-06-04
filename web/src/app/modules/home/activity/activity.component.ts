@@ -1,6 +1,8 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { FormCreateActivityComponent } from '@shared/entry-components/form-create-activity/form-create-activity.component';
 import { FormDeleteActivityComponent } from '@shared/entry-components/form-delete-activity/form-delete-activity.component';
@@ -11,6 +13,7 @@ import { ActivityService } from '@shared/services/activity.service';
 import { DataService } from '@shared/services/data.service';
 import { DialogService } from '@shared/services/dialog.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-activity',
@@ -19,6 +22,8 @@ import { SnackbarService } from '@shared/services/snackbar.service';
 })
 export class ActivityComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<RsActivitiesData>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = [
     'actividad',
     'descripcion',
@@ -60,7 +65,8 @@ export class ActivityComponent implements OnInit {
     private _data: DataService,
     private _activity: ActivityService,
     private _dialog: DialogService,
-    private _snackbar: SnackbarService
+    private _snackbar: SnackbarService,
+    private spinner: NgxSpinnerService
   ) {
     this.isAdmin = this._data.getUser.rol === 'ADMINISTRADOR';
   }
@@ -70,6 +76,7 @@ export class ActivityComponent implements OnInit {
   }
 
   private getActivities() {
+    this.spinner.show();
     this._activity.activities().subscribe({
       next: (res: RsActivities) => {
         const statusCode = res.rsGenericHeaderDto.statusCode;
@@ -80,14 +87,23 @@ export class ActivityComponent implements OnInit {
           );
           this.getUsuarioActualOption();
           this.getUsuarioOriginalOption();
+          const activityID = Number(sessionStorage.getItem('activity'));
+          if (activityID) {
+            this.usuarioActual.setValue(activityID);
+            sessionStorage.removeItem('activity');
+          }
+          this.applyFilter();
         } else {
           this._snackbar.openSnackBar(res.rsGenericHeaderDto);
         }
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       },
       error: (err) => {
         console.log(err);
       },
     });
+    this.spinner.hide();
   }
 
   applySearch(value: string) {
@@ -98,7 +114,8 @@ export class ActivityComponent implements OnInit {
     const activities = this._data.getActivities;
     const usuarioOriginalValue = this.usuarioOriginal.value.ID;
     const prioridadValue = this.prioridad.value;
-    const usuarioActualValue = this.usuarioActual.value.ID;
+    const usuarioActualValue =
+      this.usuarioActual.value.ID ?? this.usuarioActual.value;
     const estadoValue = this.estado.value;
 
     const filteredData = activities.filter((item: RsActivitiesData) => {

@@ -4,15 +4,15 @@
   <p>¿Desea eliminar la actividad {{ data.id }}?</p>
 
   <div class="group-buttons">
+    <button class="button-toolbar button-flat" (click)="onSubmit()">
+      Eliminar
+    </button>
     <button
       class="button-toolbar button-stroked"
       (click)="onClosed()"
       mat-dialog-close
     >
       Cancelar
-    </button>
-    <button class="button-toolbar button-flat" (click)="onSubmit()">
-      Eliminar
     </button>
   </div>
 </div>

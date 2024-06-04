@@ -27,4 +27,12 @@ export class RqUpdateUserDto {
   @IsOptional()
   @IsEnum(Estado)
   estado?: Estado;
+
+  @ApiProperty({
+    type: String,
+    description: "image",
+  })
+  @IsOptional()
+  @IsString()
+  image?: string;
 }

@@ -1,11 +1,14 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { RsAudits, RsAuditsData } from '@shared/models';
 import { AuditService } from '@shared/services/audit.service';
 import { DataService } from '@shared/services/data.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-audit',
@@ -14,6 +17,8 @@ import { SnackbarService } from '@shared/services/snackbar.service';
 })
 export class AuditComponent {
   @ViewChild(MatTable) table: MatTable<RsAuditsData>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = [
     'actividad',
     'descripcion',
@@ -62,7 +67,8 @@ export class AuditComponent {
   constructor(
     public _data: DataService,
     private _audit: AuditService,
-    private _snackbar: SnackbarService
+    private _snackbar: SnackbarService,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -70,6 +76,7 @@ export class AuditComponent {
   }
 
   private getAudits() {
+    this.spinner.show();
     this._audit.audits().subscribe({
       next: (res: RsAudits) => {
         const statusCode = res.rsGenericHeaderDto.statusCode;
@@ -83,11 +90,14 @@ export class AuditComponent {
         } else {
           this._snackbar.openSnackBar(res.rsGenericHeaderDto);
         }
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       },
       error: (err) => {
         console.log(err);
       },
     });
+    this.spinner.hide();
   }
 
   applySearch(value: string) {

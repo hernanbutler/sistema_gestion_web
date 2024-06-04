@@ -91,10 +91,11 @@
         matTableExporter
         [dataSource]="dataSource"
         #exporter="matTableExporter"
+        matSort
       >
         <!-- Actividad Column -->
         <ng-container matColumnDef="actividad">
-          <th mat-header-cell *matHeaderCellDef>Actividad</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Actividad</th>
           <td mat-cell *matCellDef="let element">
             {{ element.id }}
           </td>
@@ -102,19 +103,21 @@
 
         <!-- Descripcion Column -->
         <ng-container matColumnDef="descripcion">
-          <th mat-header-cell *matHeaderCellDef>Descripción</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
           <td mat-cell *matCellDef="let element">{{ element.descripcion }}</td>
         </ng-container>
 
         <!-- Prioridad Column -->
         <ng-container matColumnDef="prioridad">
-          <th mat-header-cell *matHeaderCellDef>Prioridad</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Prioridad</th>
           <td mat-cell *matCellDef="let element">{{ element.prioridad }}</td>
         </ng-container>
 
         <!-- Fecha modificacion Column -->
         <ng-container matColumnDef="fechaModificacion">
-          <th mat-header-cell *matHeaderCellDef>Fecha modificación</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Fecha modificación
+          </th>
           <td mat-cell *matCellDef="let element">
             {{ element.fechaModificacion | date : "dd/MM/yyyy hh:mm a" }}
           </td>
@@ -122,13 +125,15 @@
 
         <!-- Estado Column -->
         <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
           <td mat-cell *matCellDef="let element">{{ element.estado }}</td>
         </ng-container>
 
         <!-- Usuario Original Column -->
         <ng-container matColumnDef="usuarioOriginal">
-          <th mat-header-cell *matHeaderCellDef>Usuario Original</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Usuario Original
+          </th>
           <td mat-cell *matCellDef="let element">
             <span
               class="link-profile"
@@ -146,7 +151,9 @@
 
         <!-- Usuario Actual Column -->
         <ng-container matColumnDef="usuarioActual">
-          <th mat-header-cell *matHeaderCellDef>Usuario Actual</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Usuario Actual
+          </th>
           <td mat-cell *matCellDef="let element">
             <span
               class="link-profile"
@@ -191,6 +198,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
     </mat-card>
   </section>
 </div>

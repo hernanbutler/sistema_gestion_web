@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { withInterceptors, provideHttpClient } from '@angular/common/http';
 import { NgIconsModule } from '@ng-icons/core';
 import {
+  matCameraAlt,
   matClose,
   matDelete,
   matEdit,
@@ -17,6 +18,7 @@ import {
   matWarningAmber,
 } from '@ng-icons/material-icons/baseline';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { MaterialModule } from './material.module';
 
@@ -58,6 +60,7 @@ const MODULES: any = [
   HttpClientModule,
   MaterialModule,
   NgIconsModule.withIcons({
+    matCameraAlt,
     matClose,
     matDelete,
     matEdit,
@@ -69,6 +72,7 @@ const MODULES: any = [
     matWarningAmber,
   }),
   NgSelectModule,
+  NgxSpinnerModule,
   MatTableExporterModule,
   ReactiveFormsModule,
   RouterModule,
@@ -80,5 +84,6 @@ const PIPES: any = [EstadoPipe, UserPipe];
   imports: [MODULES],
   exports: [COMPONENTS, MODULES, PIPES],
   providers: [provideHttpClient(withInterceptors([authInterceptor])), PIPES],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SharedModule {}

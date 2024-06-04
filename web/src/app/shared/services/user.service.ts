@@ -8,6 +8,7 @@ import {
   RsUsers,
 } from '@shared/models';
 import { DataService } from './data.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -29,5 +30,18 @@ export class UserService {
 
   updateUser(id: number, body: any): Observable<any> {
     return this._http.patch(`/v1/api/user/${id}`, body);
+  }
+
+  upload(id: number, data: any): Observable<any> {
+    const headers = new HttpHeaders();
+    return this._http.patch(`/v1/api/user/upload/${id}`, data, {
+      headers: headers,
+    });
+  }
+
+  getImage(id: any): Observable<any> {
+    return this._http.get('/v1/api/user/upload/' + id, {
+      responseType: 'blob',
+    });
   }
 }
