@@ -6,9 +6,13 @@ import { RouterModule } from '@angular/router';
 import { withInterceptors, provideHttpClient } from '@angular/common/http';
 import { NgIconsModule } from '@ng-icons/core';
 import {
+  matArrowDownward,
+  matArrowUpward,
+  matCameraAlt,
   matClose,
   matDelete,
   matEdit,
+  matEquals,
   matKey,
   matKeyOff,
   matRemoveRedEye,
@@ -19,10 +23,11 @@ import {
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { MaterialModule } from './material.module';
-
 import { AuthComponent } from '@layout/auth/auth.component';
 import { HomeComponent } from '@layout/home/home.component';
+import { ChipComponent } from './components/chip/chip.component';
 import { DatepickerComponent } from './components/datepicker/datepicker.component';
+import { ErrorComponent } from './components/error/error.component';
 import { FormFieldComponent } from './components/form-field/form-field.component';
 import { SearchComponent } from './components/search/search.component';
 import { SelectComponent } from './components/select/select.component';
@@ -34,12 +39,15 @@ import { FormUpdateActivityComponent } from './entry-components/form-update-acti
 import { FormUpdateUserComponent } from './entry-components/form-update-user/form-update-user.component';
 import { FormViewActivityComponent } from './entry-components/form-view-activity/form-view-activity.component';
 import { authInterceptor } from './interceptors/auth.interceptor';
+import { errorInterceptor } from './interceptors/error.interceptor';
 import { EstadoPipe } from './pipes/estado.pipe';
 import { UserPipe } from './pipes/user.pipe';
 
 const COMPONENTS: any = [
   AuthComponent,
+  ChipComponent,
   DatepickerComponent,
+  ErrorComponent,
   FormFieldComponent,
   HomeComponent,
   SearchComponent,
@@ -58,9 +66,13 @@ const MODULES: any = [
   HttpClientModule,
   MaterialModule,
   NgIconsModule.withIcons({
+    matArrowDownward,
+    matArrowUpward,
+    matCameraAlt,
     matClose,
     matDelete,
     matEdit,
+    matEquals,
     matKey,
     matKeyOff,
     matRemoveRedEye,
@@ -79,6 +91,9 @@ const PIPES: any = [EstadoPipe, UserPipe];
   declarations: [COMPONENTS, PIPES],
   imports: [MODULES],
   exports: [COMPONENTS, MODULES, PIPES],
-  providers: [provideHttpClient(withInterceptors([authInterceptor])), PIPES],
+  providers: [
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+    PIPES,
+  ],
 })
 export class SharedModule {}

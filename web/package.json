@@ -26,6 +26,7 @@
     "@ng-icons/material-icons": "^27.4.0",
     "@ng-select/ng-select": "^13.0.4",
     "mat-table-exporter": "^15.0.0",
+    "ngx-spinner": "^17.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

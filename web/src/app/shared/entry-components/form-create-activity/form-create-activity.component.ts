@@ -6,6 +6,7 @@ import { RsRegisterUser } from '@shared/models';
 import { ActivityService } from '@shared/services/activity.service';
 import { DataService } from '@shared/services/data.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-form-create-activity',
@@ -17,11 +18,14 @@ export class FormCreateActivityComponent implements OnInit {
     public _data: DataService,
     private _activity: ActivityService,
     private _snackbar: SnackbarService,
-    private _dialog: DialogRef
+    private _dialog: DialogRef,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
+    this.spinner.show();
     this.getUsersOption();
+    this.spinner.hide();
   }
 
   form: FormGroup = new FormGroup({
@@ -46,6 +50,7 @@ export class FormCreateActivityComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
+      this.spinner.show();
       this._activity
         .create({
           descripcion: this.descripcion.value,
@@ -53,23 +58,20 @@ export class FormCreateActivityComponent implements OnInit {
           prioridad: this.prioridad.value,
           estado: this.estado.value,
         })
-        .subscribe({
-          next: (res: RsRegisterUser) => {
-            const statusCode = res.rsGenericHeaderDto.statusCode;
-            if (statusCode == HttpStatusCode.Created) {
-              this._dialog.close();
-            } else {
-              this._snackbar.openSnackBar(res.rsGenericHeaderDto);
-            }
-          },
-          error: (err) => {
-            console.log(err);
-          },
+        .subscribe((res: RsRegisterUser) => {
+          const statusCode = res.rsGenericHeaderDto.statusCode;
+          if (statusCode == HttpStatusCode.Created) {
+            this._dialog.close();
+          } else {
+            this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+          }
+          this.spinner.hide();
         });
     } else {
       this.form.markAllAsTouched();
     }
   }
+
   getUsersOption(): any {
     this._data.getUsers?.map((item: any) => {
       this.usersOption.push({

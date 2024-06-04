@@ -3,9 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AuthComponent } from '@layout/auth/auth.component';
 import { HomeComponent } from '@layout/home/home.component';
+import { ErrorComponent } from '@shared/components/error/error.component';
 import { AuthGuard } from '@shared/guards/auth.guard';
 
 const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'auth',
+    pathMatch: 'full',
+  },
   {
     path: 'auth',
     component: AuthComponent,
@@ -20,9 +26,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: '',
-    redirectTo: 'auth',
-    pathMatch: 'full',
+    path: '**',
+    component: ErrorComponent,
   },
 ];
 

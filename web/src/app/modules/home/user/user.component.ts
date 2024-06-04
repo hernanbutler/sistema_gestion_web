@@ -2,6 +2,9 @@ import { HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { FormCreateUserComponent } from '@shared/entry-components/form-create-user/form-create-user.component';
 import { RsUsers, RsUsersData } from '@shared/models/rs-users.model';
 import { DataService } from '@shared/services/data.service';
@@ -16,6 +19,8 @@ import { UserService } from '@shared/services/user.service';
 })
 export class UserComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<RsUsersData>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = [
     'email',
     'nombres',
@@ -45,7 +50,8 @@ export class UserComponent implements OnInit {
     private _data: DataService,
     private _user: UserService,
     private _dialog: DialogService,
-    private _snackbar: SnackbarService
+    private _snackbar: SnackbarService,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -53,21 +59,20 @@ export class UserComponent implements OnInit {
   }
 
   private getUsers() {
-    this._user.users().subscribe({
-      next: (res: RsUsers) => {
-        const statusCode = res.rsGenericHeaderDto.statusCode;
-        if (statusCode == HttpStatusCode.Ok) {
-          this._data.setUsers = res.rsUsersDataDto;
-          this.dataSource = new MatTableDataSource<RsUsersData>(
-            this._data.getUsers
-          );
-        } else {
-          this._snackbar.openSnackBar(res.rsGenericHeaderDto);
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+    this.spinner.show();
+    this._user.users().subscribe((res: RsUsers) => {
+      const statusCode = res.rsGenericHeaderDto.statusCode;
+      if (statusCode == HttpStatusCode.Ok) {
+        this._data.setUsers = res.rsUsersDataDto;
+        this.dataSource = new MatTableDataSource<RsUsersData>(
+          this._data.getUsers
+        );
+      } else {
+        this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+      }
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.spinner.hide();
     });
   }
 

@@ -3,6 +3,7 @@
   <ng-select
     [formControl]="control"
     [searchable]="false"
+    [compareWith]="compareFn"
     appendTo="body"
     (change)="onChange($event)"
   >

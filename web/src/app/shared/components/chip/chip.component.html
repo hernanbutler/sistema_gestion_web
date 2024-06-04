@@ -1,0 +1,11 @@
+<div class="chip-content">
+  @if (status) {
+  <span [ngClass]="getClassOf(status)">{{ status }}</span>
+  } @else if (priority) {
+  <ng-icon
+    [name]="getIconOf(priority)"
+    [class]="'priority-' + priority.toLocaleLowerCase()"
+    size="20px"
+  ></ng-icon>
+  }
+</div>
