@@ -3,9 +3,9 @@ import { HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RsRegisterUser } from '@shared/models';
-import { AuthService } from '@shared/services/auth.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
 import { UserService } from '@shared/services/user.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-form-create-user',
@@ -16,7 +16,8 @@ export class FormCreateUserComponent {
   constructor(
     private _user: UserService,
     private _snackbar: SnackbarService,
-    private _dialog: DialogRef
+    private _dialog: DialogRef,
+    private spinner: NgxSpinnerService
   ) {}
 
   form: FormGroup = new FormGroup({
@@ -32,24 +33,21 @@ export class FormCreateUserComponent {
 
   onSubmit(): void {
     if (this.form.valid) {
+      this.spinner.show();
       this._user
         .register({
           email: this.email.value,
           password: this.password.value,
           rol: this.rol.value.toUpperCase(),
         })
-        .subscribe({
-          next: (res: RsRegisterUser) => {
-            const statusCode = res.rsGenericHeaderDto.statusCode;
-            if (statusCode == HttpStatusCode.Created) {
-              this._dialog.close();
-            } else {
-              this._snackbar.openSnackBar(res.rsGenericHeaderDto);
-            }
-          },
-          error: (err) => {
-            console.log(err);
-          },
+        .subscribe((res: RsRegisterUser) => {
+          const statusCode = res.rsGenericHeaderDto.statusCode;
+          if (statusCode == HttpStatusCode.Created) {
+            this._dialog.close();
+          } else {
+            this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+          }
+          this.spinner.hide();
         });
     } else {
       this.form.markAllAsTouched();

@@ -77,6 +77,7 @@ export class AuditComponent {
 
   private getAudits() {
     this.spinner.show();
+<<<<<<< HEAD
     this._audit.audits().subscribe({
       next: (res: RsAudits) => {
         const statusCode = res.rsGenericHeaderDto.statusCode;
@@ -96,6 +97,23 @@ export class AuditComponent {
       error: (err) => {
         console.log(err);
       },
+=======
+    this._audit.audits().subscribe((res: RsAudits) => {
+      const statusCode = res.rsGenericHeaderDto.statusCode;
+      if (statusCode == HttpStatusCode.Ok) {
+        this._data.setAudits = res.rsGetAuditDataDto;
+        this.dataSource = new MatTableDataSource<RsAuditsData>(
+          this._data.getAudits
+        );
+        this.getAuditsOption();
+        this.getUsersOption();
+      } else {
+        this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+      }
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.spinner.hide();
+>>>>>>> origin/master
     });
     this.spinner.hide();
   }

@@ -2,6 +2,10 @@
   font-family: "Open Sans", sans-serif !important;
 }
 
+button:focus-visible {
+  outline: none;
+}
+
 button.button-toolbar {
   border-radius: 4px;
   cursor: pointer;
@@ -11,21 +15,18 @@ button.button-toolbar {
   &:hover {
     opacity: 0.8;
   }
-  &:focus-visible {
-    outline: none;
-  }
 }
 
 .button-flat {
-  color: #fff;
-  background-color: #0d99ff;
-  border: none;
+  color: #fff !important;
+  background-color: #0d99ff !important;
+  border: none !important;
 }
 
 .button-stroked {
-  color: #0d99ff;
-  background-color: transparent;
-  border: 1px solid #0d99ff;
+  color: #0d99ff !important;
+  background-color: transparent !important;
+  border: 1px solid #0d99ff !important;
 }
 
 .snack-bar-container {
@@ -51,4 +52,9 @@ button.button-toolbar {
   text-overflow: ellipsis;
   max-width: 100px;
   white-space: nowrap;
+}
+
+.mat-column-operacion,
+.mat-column-rol {
+  font-weight: 500;
 }
