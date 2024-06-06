@@ -13,4 +13,5 @@ export interface RsUsersData {
   estado: number;
   nombreUsuario: string;
   rol: string;
+  image: string;
 }

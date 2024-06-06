@@ -6,6 +6,8 @@ import {
   Param,
   Patch,
   Post,
+  Res,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
@@ -36,6 +38,9 @@ import { AuthGuard } from "@guards/auth.guard";
 import { RolesGuard } from "@guards/roles.guard";
 import { Roles } from "src/decorators";
 import { Rol } from "./common/enums";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { join } from "path";
+import { Observable, of } from "rxjs";
 
 @ApiTags("Autenticacion")
 @Controller()
@@ -130,5 +135,20 @@ export class AuthController {
     @Body() rqUpdateUserDto: RqUpdateUserDto
   ): Promise<RsUpdateUserDto> {
     return await this.userService.update(+id, rqUpdateUserDto);
+  }
+
+  @Patch("user/upload/:id")
+  @UseInterceptors(FileInterceptor("file"))
+  async upload(
+    @Param("id") id: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Promise<RsUpdateUserDto> {
+    return await this.userService.update(+id, { image: file.filename });
+  }
+
+  @Get("user/upload/:id")
+  @UseGuards(AuthGuard)
+  findImage(@Param("id") id: string, @Res() res): Observable<Object> {
+    return of(res.sendFile(join(process.cwd(), "uploads/" + id)));
   }
 }

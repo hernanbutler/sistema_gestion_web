@@ -5,6 +5,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { DataService } from '@shared/services/data.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
 import { UserService } from '@shared/services/user.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-form-update-user',
@@ -16,7 +17,8 @@ export class FormUpdateUserComponent {
     private _data: DataService,
     private _user: UserService,
     private _snackbar: SnackbarService,
-    private _dialog: DialogRef
+    private _dialog: DialogRef,
+    private spinner: NgxSpinnerService
   ) {}
 
   form: FormGroup = new FormGroup({
@@ -25,19 +27,18 @@ export class FormUpdateUserComponent {
   });
 
   onSubmit(): void {
-    this._user.updateUser(this._data.getUser.id, this.form.value).subscribe({
-      next: (res: any) => {
+    this.spinner.show();
+    this._user
+      .updateUser(this._data.getUser.id, this.form.value)
+      .subscribe((res: any) => {
         const statusCode = res.rsGenericHeaderDto.statusCode;
         if (statusCode == HttpStatusCode.Ok) {
           this._dialog.close();
         } else {
           this._snackbar.openSnackBar(res.rsGenericHeaderDto);
         }
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
+        this.spinner.hide();
+      });
   }
 
   get nombres(): any {

@@ -7,7 +7,21 @@
   }
   <mat-card>
     <section class="avatar">
-      <img src="assets/images/avatar-default.png" alt="" />
+      <div
+        class="group-img"
+        id="src-file"
+        [ngClass]="{ 'image-hovering': currentUser }"
+      >
+        <img [src]="user.imagen" />
+        @if (currentUser) {
+        <div class="input-img">
+          <ng-icon name="matCameraAlt" size="30px"></ng-icon>
+          <span>Cambiar foto de perfil</span>
+        </div>
+        <input type="file" name="src-file" (change)="uploadImage($event)" />
+        }
+      </div>
+
       @if(currentUser) {
       <label (click)="updateUser()">Editar perfil</label>
       }
@@ -41,7 +55,7 @@
         <!-- Estado -->
         <div class="form-field">
           <label for="">Estado:</label>
-          @if (!isAdmin) {
+          @if (!isAdmin || currentUser) {
           <input type="text" name="estado" [ngModel]="user.estado | estado" />
           } @else {
           <ng-select
@@ -60,7 +74,14 @@
       </form>
     </section>
 
-    @if (currentUser) {
+    @if (isAdmin) {
+    <a>
+      Ir a
+      <span (click)="goActivity()">{{
+        currentUser ? "mis actividades" : "actividades del usuario"
+      }}</span>
+    </a>
+    } @if (currentUser) {
     <section class="logout">
       <button class="button-toolbar button-flat" (click)="logout()">
         Cerrar sesión

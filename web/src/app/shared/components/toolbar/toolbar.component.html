@@ -10,7 +10,7 @@
     @if (isAdmin) {
     <button
       class="button-toolbar button-stroked"
-      routerLink="users"
+      routerLink="/home/users"
       routerLinkActive="is-active"
     >
       Usuarios
@@ -19,7 +19,7 @@
 
     <button
       class="button-toolbar button-stroked"
-      routerLink="activities"
+      routerLink="/home/activities"
       routerLinkActive="is-active"
     >
       Actividades
@@ -28,11 +28,18 @@
     @if (isAdmin) {
     <button
       class="button-toolbar button-stroked"
-      routerLink="audits"
+      routerLink="/home/audits"
       routerLinkActive="is-active"
     >
       Auditoria
     </button>
     }
+  </section>
+  <section class="right-side">
+    <span>{{
+      _data.getUser.nombres && _data.getUser.apellidos
+        ? _data.getUser.nombres + " " + _data.getUser.apellidos
+        : _data.getUser.email
+    }}</span>
   </section>
 </div>

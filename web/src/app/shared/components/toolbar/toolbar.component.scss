@@ -3,13 +3,18 @@
   justify-content: space-between;
   padding: 8px 20px;
   border-bottom: 1px solid #cccccc;
+  align-items: center;
   .left-side {
     display: flex;
     column-gap: 8px;
   }
+  .right-side {
+    font-size: 14px;
+    font-weight: 600;
+  }
 }
 
 .is-active {
-  color: #ffffff;
-  background-color: #0d99ff;
+  color: #ffffff !important;
+  background-color: #0d99ff !important;
 }

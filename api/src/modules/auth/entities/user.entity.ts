@@ -29,4 +29,7 @@ export class UserEntity {
 
   @Column({ type: "enum", enum: Rol })
   rol: Rol;
+
+  @Column({ name: "image", nullable: true })
+  image?: string;
 }

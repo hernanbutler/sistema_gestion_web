@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { HttpStatus, Inject, Injectable, OnModuleInit } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
@@ -21,7 +21,7 @@ import {
 } from "./interfaces";
 
 @Injectable()
-export class UserService {
+export class UserService implements OnModuleInit {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
@@ -35,6 +35,18 @@ export class UserService {
     @Inject(USER_FACTORY_SERVICE)
     private readonly userFactoryService: IUserFactory
   ) {}
+
+  onModuleInit() {
+    this.userRepository
+      .query(`INSERT INTO usuarios (email, password, estado, rol)
+        SELECT 'admin@daw.com', '$2b$10$amt3Fs2Odn4OCDndgg8yZegoobDS.yQzpmeYNqIuVIPXi8vhxJqh2', 1, 'ADMINISTRADOR'
+        FROM dual
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM usuarios
+            WHERE email = 'admin@daw.com'
+        );`);
+  }
 
   async register(
     rqRegisterUserDto: RqRegisterUserDto

@@ -7,6 +7,7 @@ import { RsLoginUser } from '@shared/models';
 import { AuthService } from '@shared/services/auth.service';
 import { DataService } from '@shared/services/data.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ export class LoginComponent {
     private _router: Router,
     private _auth: AuthService,
     private _data: DataService,
-    private _snackbar: SnackbarService
+    private _snackbar: SnackbarService,
+    private spinner: NgxSpinnerService
   ) {}
 
   form: FormGroup = new FormGroup({
@@ -28,23 +30,20 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.form.valid) {
-      this._auth.login(this.form.value).subscribe({
-        next: (res: RsLoginUser) => {
-          const statusCode = res.rsGenericHeaderDto.statusCode;
-          if (statusCode == HttpStatusCode.Ok) {
-            const token = res.rsLoginUserDataDto.token;
-            sessionStorage.setItem('token', token);
-            this._data.setUser = new JwtHelperService().decodeToken(
-              token
-            ).payload;
-            this._router.navigate(['/home/profile/' + this._data.getUser.id]);
-          } else {
-            this._snackbar.openSnackBar(res.rsGenericHeaderDto);
-          }
-        },
-        error: (err) => {
-          console.log(err);
-        },
+      this.spinner.show();
+      this._auth.login(this.form.value).subscribe((res: RsLoginUser) => {
+        const statusCode = res.rsGenericHeaderDto.statusCode;
+        if (statusCode == HttpStatusCode.Ok) {
+          const token = res.rsLoginUserDataDto.token;
+          sessionStorage.setItem('token', token);
+          this._data.setUser = new JwtHelperService().decodeToken(
+            token
+          ).payload;
+          this._router.navigate(['/home/profile/' + this._data.getUser.id]);
+        } else {
+          this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+        }
+        this.spinner.hide();
       });
     } else {
       this.form.markAllAsTouched();

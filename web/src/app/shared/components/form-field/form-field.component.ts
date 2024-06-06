@@ -7,7 +7,7 @@ import { FormControl } from '@angular/forms';
   styleUrl: './form-field.component.scss',
 })
 export class FormFieldComponent {
-  @Input() control: any;
+  @Input() control: FormControl = new FormControl();
   @Input() name: string = '';
   @Input() label: string = '';
   @Input() type: string = 'text';
