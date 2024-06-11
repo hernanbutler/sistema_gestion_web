@@ -60,6 +60,7 @@ export class UserComponent implements OnInit {
 
   private getUsers() {
     this.spinner.show();
+<<<<<<< HEAD
     this._user.users().subscribe({
       next: (res: RsUsers) => {
         const statusCode = res.rsGenericHeaderDto.statusCode;
@@ -77,6 +78,21 @@ export class UserComponent implements OnInit {
       error: (err) => {
         console.log(err);
       },
+=======
+    this._user.users().subscribe((res: RsUsers) => {
+      const statusCode = res.rsGenericHeaderDto.statusCode;
+      if (statusCode == HttpStatusCode.Ok) {
+        this._data.setUsers = res.rsUsersDataDto;
+        this.dataSource = new MatTableDataSource<RsUsersData>(
+          this._data.getUsers
+        );
+      } else {
+        this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+      }
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.spinner.hide();
+>>>>>>> origin/master
     });
     this.spinner.hide();
   }

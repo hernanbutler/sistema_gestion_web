@@ -96,6 +96,7 @@ export class ActivityComponent implements OnInit {
 
   private getActivities() {
     this.spinner.show();
+<<<<<<< HEAD
     this._activity.activities().subscribe({
       next: (res: RsActivities) => {
         const statusCode = res.rsGenericHeaderDto.statusCode;
@@ -121,6 +122,29 @@ export class ActivityComponent implements OnInit {
       error: (err) => {
         console.log(err);
       },
+=======
+    this._activity.activities().subscribe((res: RsActivities) => {
+      const statusCode = res.rsGenericHeaderDto.statusCode;
+      if (statusCode == HttpStatusCode.Ok) {
+        this._data.setActivities = res.rsActivitiesDataDto;
+        this.dataSource = new MatTableDataSource<RsActivitiesData>(
+          this._data.getActivities
+        );
+        this.getUsuarioActualOption();
+        this.getUsuarioOriginalOption();
+        const activityID = Number(sessionStorage.getItem('activity'));
+        if (activityID) {
+          this.usuarioActual.setValue(activityID);
+          sessionStorage.removeItem('activity');
+        }
+        this.applyFilter();
+      } else {
+        this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+      }
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.spinner.hide();
+>>>>>>> origin/master
     });
     this.spinner.hide();
   }

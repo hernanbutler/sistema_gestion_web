@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivityService } from '@shared/services/activity.service';
 import { DataService } from '@shared/services/data.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-form-view-activity',
@@ -18,11 +19,14 @@ export class FormViewActivityComponent implements OnInit {
     public _data: DataService,
     private _activity: ActivityService,
     private _snackbar: SnackbarService,
-    private _dialog: DialogRef
+    private _dialog: DialogRef,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
+    this.spinner.show();
     this.getUsersOption();
+    this.spinner.hide();
   }
 
   form: FormGroup = new FormGroup({
@@ -60,6 +64,7 @@ export class FormViewActivityComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
+      this.spinner.show();
       this._activity
         .update(this.data.id, {
           descripcion: this.descripcion.value,
@@ -70,18 +75,14 @@ export class FormViewActivityComponent implements OnInit {
           prioridad: this.prioridad.value,
           estado: this.estado.value,
         })
-        .subscribe({
-          next: (res: any) => {
-            const statusCode = res.rsGenericHeaderDto.statusCode;
-            if (statusCode == HttpStatusCode.Ok) {
-              this._dialog.close();
-            } else {
-              this._snackbar.openSnackBar(res.rsGenericHeaderDto);
-            }
-          },
-          error: (err) => {
-            console.log(err);
-          },
+        .subscribe((res: any) => {
+          const statusCode = res.rsGenericHeaderDto.statusCode;
+          if (statusCode == HttpStatusCode.Ok) {
+            this._dialog.close();
+          } else {
+            this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+          }
+          this.spinner.hide();
         });
     } else {
       this.form.markAllAsTouched();

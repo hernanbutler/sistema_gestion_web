@@ -35,12 +35,13 @@ export class ProfileComponent {
   userId: any;
   avatar: any = 'assets/images/avatar-default.png';
 
-  user = {
+  user: any = {
     nombre: '',
     apellido: '',
     email: '',
     rol: '',
     estado: 0,
+    imagen: '',
   };
 
   estadoOption: any[] = [
@@ -69,13 +70,18 @@ export class ProfileComponent {
         if (res.rsUserDataDto.image) {
           this._user.getImage(res.rsUserDataDto.image).subscribe((res: any) => {
             let objectURL = URL.createObjectURL(res);
+<<<<<<< HEAD
             this.avatar = this.sanitizer.bypassSecurityTrustUrl(objectURL);
             this._data.setAvatar = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+=======
+            this.user.imagen = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+>>>>>>> origin/master
           });
         }
       } else {
         this._snackbar.openSnackBar(res.rsGenericHeaderDto);
       }
+      this.spinner.hide();
     });
     this.spinner.hide();
   }
@@ -86,22 +92,21 @@ export class ProfileComponent {
     this.user.email = data.email;
     this.user.rol = data.rol;
     this.user.estado = data.estado;
+    this.user.imagen = data.imagen ?? 'assets/images/avatar-default.png';
   }
 
   updateEstado() {
-    this._user.updateUser(this.userId, { estado: this.user.estado }).subscribe({
-      next: (res: any) => {
+    this.spinner.show();
+    this._user
+      .updateUser(this.userId, { estado: this.user.estado })
+      .subscribe((res: any) => {
         const statusCode = res.rsGenericHeaderDto.statusCode;
         if (statusCode == HttpStatusCode.Ok) {
           this.getUser();
         } else {
           this._snackbar.openSnackBar(res.rsGenericHeaderDto);
         }
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
+      });
   }
 
   updateUser(): void {
@@ -114,6 +119,10 @@ export class ProfileComponent {
   }
 
   uploadImage(event: any) {
+<<<<<<< HEAD
+=======
+    this.spinner.show();
+>>>>>>> origin/master
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('file', file, file.name);

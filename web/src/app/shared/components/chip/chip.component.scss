@@ -1,0 +1,39 @@
+@mixin status($color1, $color2) {
+  background-color: $color1;
+  color: $color2;
+}
+
+@mixin priority($color) {
+  color: $color;
+}
+
+.chip-content span {
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+}
+
+.status-pending {
+  @include status(rgb(198, 241, 218), rgb(6, 23, 6));
+}
+
+.status-finished {
+  @include status(rgb(215, 228, 254), rgb(8, 29, 74));
+}
+
+.status-deleted {
+  @include status(rgb(250, 217, 217), rgb(46, 6, 3));
+}
+
+::ng-deep ng-icon.priority-baja {
+  @include priority(rgb(82, 187, 131));
+}
+
+::ng-deep ng-icon.priority-media {
+  @include priority(rgb(207, 118, 57));
+}
+
+::ng-deep ng-icon.priority-alta {
+  @include priority(rgb(207, 70, 70));
+}
