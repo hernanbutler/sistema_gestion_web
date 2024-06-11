@@ -65,6 +65,22 @@
     </section>
   </mat-card>
 
+  <div class="avatar">
+    <div
+      class="group-img"
+      id="src-file"
+      [ngClass]="{ 'image-hovering': currentUser }"
+    >
+      <img [src]="avatar" />
+      
+      <span>{{
+          _data.getUser.nombres && _data.getUser.apellidos
+            ? _data.getUser.nombres + " " + _data.getUser.apellidos
+            : _data.getUser.email
+      }}</span>
+    </div>
+  </div>
+  
   <section class="activity-action">
     <div class="left-side">
       <app-search (propagar)="applySearch($event)"></app-search>

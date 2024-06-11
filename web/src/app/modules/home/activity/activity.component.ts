@@ -14,6 +14,8 @@ import { DataService } from '@shared/services/data.service';
 import { DialogService } from '@shared/services/dialog.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { UserService } from '@shared/services/user.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-activity',
@@ -46,6 +48,19 @@ export class ActivityComponent implements OnInit {
     estado: new FormControl(''),
   });
 
+  currentUser: boolean = false;
+  isProfiledCompleted: boolean = true;
+  userId: any;
+  avatar: any = 'assets/images/avatar-default.png';
+
+  user = {
+    nombre: '',
+    apellido: '',
+    email: '',
+    rol: '',
+    estado: 0,
+  };
+  
   prioridadOption: any[] = [
     { ID: 0, name: 'ALTA' },
     { ID: 1, name: 'MEDIA' },
@@ -62,13 +77,17 @@ export class ActivityComponent implements OnInit {
   usuarioActualOption: any[] = [];
 
   constructor(
-    private _data: DataService,
+    private _user: UserService,
+    public _data: DataService,
     private _activity: ActivityService,
     private _dialog: DialogService,
     private _snackbar: SnackbarService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private sanitizer: DomSanitizer,
+
   ) {
     this.isAdmin = this._data.getUser.rol === 'ADMINISTRADOR';
+    this.avatar = this._data.getAvatar;
   }
 
   ngOnInit(): void {
@@ -104,6 +123,47 @@ export class ActivityComponent implements OnInit {
       },
     });
     this.spinner.hide();
+  }
+  
+  private getUser() {
+    this.spinner.show();
+    this._user.user(this.userId).subscribe((res: any) => {
+      const statusCode = res.rsGenericHeaderDto.statusCode;
+      if (statusCode == HttpStatusCode.Ok) {
+        this.setData(res.rsUserDataDto);
+        if (this.currentUser) {
+          this._data.setUser = res.rsUserDataDto;
+          this.isProfiledCompleted = true;
+        }
+        if (res.rsUserDataDto.image) {
+          this._user.getImage(res.rsUserDataDto.image).subscribe((res: any) => {
+            let objectURL = URL.createObjectURL(res);
+            this.avatar = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+          });
+        }
+      } else {
+        this._snackbar.openSnackBar(res.rsGenericHeaderDto);
+      }
+    });
+    this.spinner.hide();
+  }
+
+  private setData(data: any): void {
+    this.user.nombre = data.nombres;
+    this.user.apellido = data.apellidos;
+    this.user.email = data.email;
+    this.user.rol = data.rol;
+    this.user.estado = data.estado;
+  }
+
+
+  uploadImage(event: any) {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    this._user.upload(this.userId, formData).subscribe(() => {
+      this.getUser();
+    });
   }
 
   applySearch(value: string) {

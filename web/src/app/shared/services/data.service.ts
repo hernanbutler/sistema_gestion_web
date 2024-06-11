@@ -8,6 +8,8 @@ export class DataService {
   private users: any;
   private activities: any;
   private audits: any;
+  private avatar: any;
+
 
   get getUser() {
     return this.user;
@@ -44,4 +46,13 @@ export class DataService {
   get isProfileCompleted(): boolean {
     return this.user.nombres && this.user.apellidos;
   }
+  
+  set setAvatar( value: any){
+    this.avatar = value;
+  }
+
+  get getAvatar() {
+    return this.avatar;
+  }
+  
 }

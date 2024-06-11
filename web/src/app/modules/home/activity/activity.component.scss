@@ -44,4 +44,32 @@
       }
     }
   }
+
+  .avatar {
+    display: grid;
+    justify-items: center;
+    row-gap: 10px;
+    justify-content: flex-start;
+    .group-img {
+      display: flex;
+      align-items: center;
+      img {
+        width: 50px;
+        border-radius: 50%;
+      }
+      
+      }
+    span{
+        margin-left: 10px;
+        font-size: 14px;
+        font-weight: 600;   
+    }
+  }
 }
+
+// .alinear {
+//     display: flex;
+    
+//     align-items: center;
+// }
+

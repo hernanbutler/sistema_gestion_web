@@ -70,6 +70,7 @@ export class ProfileComponent {
           this._user.getImage(res.rsUserDataDto.image).subscribe((res: any) => {
             let objectURL = URL.createObjectURL(res);
             this.avatar = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            this._data.setAvatar = this.sanitizer.bypassSecurityTrustUrl(objectURL);
           });
         }
       } else {
